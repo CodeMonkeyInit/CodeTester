@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DockerIntegration
 {
-    public class DockerContainer
-    {
-        public Instance Run(Command command)
-        {
-            
-        }
-    }
-    
     public class DockerContainerExecutor
     {
-        public DockerOutput Execute(Command command)
+        private readonly IServiceProvider _serviceProvider;
+
+        public DockerContainerExecutor(IServiceProvider serviceProvider)
         {
-            
+            _serviceProvider = serviceProvider;
+        }
+        
+        public Task<ContainerExecutionResult> Execute(Command command)
+        {
+            //TODO add load calibration
+            var dockerContainer = _serviceProvider.GetService<DockerContainer>();
+
+            return dockerContainer.RunAsync(command);
         }
     }
 }

@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CodeExecutionSystem.Contracts\CodeExecutionSystem.Contracts.csproj" />
+      <ProjectReference Include="..\DockerIntegration\DockerIntegration.csproj" />
     </ItemGroup>
 
 </Project>

@@ -4,6 +4,6 @@ namespace DockerIntegration
     {
         public long TimeLimitInMs { get; set; }
         
-        public long MemoryLimitInKb { get; set; }
+        public long MemoryLimitInBytes { get; set; }
     }
 }
