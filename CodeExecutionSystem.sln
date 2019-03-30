@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeExecutionSystem.Contrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerIntegration", "DockerIntegration\DockerIntegration.csproj", "{0D9E4D30-DEAE-42E0-ACD6-623D50617572}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeExecution", "CodeExecution\CodeExecution.csproj", "{0C348905-76BA-4B7F-AEF9-E7B9685D1753}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{6926F620-E443-46A9-BA4F-00D0606A8A0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{0D9E4D30-DEAE-42E0-ACD6-623D50617572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D9E4D30-DEAE-42E0-ACD6-623D50617572}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D9E4D30-DEAE-42E0-ACD6-623D50617572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6926F620-E443-46A9-BA4F-00D0606A8A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6926F620-E443-46A9-BA4F-00D0606A8A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6926F620-E443-46A9-BA4F-00D0606A8A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6926F620-E443-46A9-BA4F-00D0606A8A0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

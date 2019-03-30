@@ -2,8 +2,8 @@ namespace CodeExecutionSystem.Contracts
 {
     public enum Language
     {
-        Js,
-        Php,
-        Pascal
+        Js = 0,
+        Php = 1,
+        Pascal = 2
     }
 }

@@ -5,8 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CodeExecutionSystem.Contracts\CodeExecutionSystem.Contracts.csproj" />
-      <ProjectReference Include="..\DockerIntegration\DockerIntegration.csproj" />
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 

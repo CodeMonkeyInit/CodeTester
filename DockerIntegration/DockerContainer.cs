@@ -47,8 +47,10 @@ namespace DockerIntegration
                 
                 await _client.Containers.KillContainerAsync(_createContainerResponse.ID, new ContainerKillParameters());
 
-                return ContainerExecutionResult.Killed;
+                return ContainerExecutionResult.KilledByTimeout;
             }
+            
+            //TODO add killed by memory limit
 
             var errorOutputTask = GetContainerLogsAsync(new ContainerLogsParameters {ShowStderr = true});
             var standardOutputTask =  GetContainerLogsAsync(new ContainerLogsParameters{ShowStdout = true});
