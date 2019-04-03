@@ -4,6 +4,7 @@ namespace CodeExecutionSystem.Contracts
     {
         Js = 0,
         Php = 1,
-        Pascal = 2
+        Pascal = 2,
+        CPlusPlus = 3
     }
 }

@@ -3,8 +3,6 @@ using CodeExecutionSystem.Contracts;
 
 namespace CodeAnalysis
 {
-    
-
     public abstract class Code
     {
         public string Author { get; set; }
@@ -13,6 +11,6 @@ namespace CodeAnalysis
 
         public Language Language { get; set; }
 
-        public string PathToCode { get; set; } = string.Empty;
+        public string WorkingDirectory { get; set; } = string.Empty;
     }
 }

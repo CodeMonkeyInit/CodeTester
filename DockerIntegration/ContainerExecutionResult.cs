@@ -10,6 +10,8 @@ namespace DockerIntegration
         
         public static ContainerExecutionResult KilledByTimeout => new ContainerExecutionResult {Result = ExecutionResult.KilledByTimeout}; 
         
-        public static ContainerExecutionResult KilledByMemoryLimit => new ContainerExecutionResult {Result = ExecutionResult.KilledByMemoryLimit}; 
+        public static ContainerExecutionResult KilledByMemoryLimit => new ContainerExecutionResult {Result = ExecutionResult.KilledByMemoryLimit};
+
+        public bool WasSuccessful => Result == ExecutionResult.Success && string.IsNullOrWhiteSpace(ErrorOutput);
     }
 }

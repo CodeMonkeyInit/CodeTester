@@ -13,7 +13,7 @@ namespace DockerIntegration
             _serviceProvider = serviceProvider;
         }
         
-        public Task<ContainerExecutionResult> Execute(Command command)
+        public Task<ContainerExecutionResult> ExecuteAsync(Command command)
         {
             //TODO add load calibration
             var dockerContainer = _serviceProvider.GetService<DockerContainer>();
