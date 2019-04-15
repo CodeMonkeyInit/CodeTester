@@ -1,8 +1,8 @@
 using System;
-using CodeAnalysis;
 using CodeExecutionSystem.Contracts;
+using CodeExecutionSystem.Contracts.Data;
 
-namespace CodeExecution
+namespace CodeExecution.Extension
 {
     public static class LanguageExtensions
     {
@@ -40,25 +40,5 @@ namespace CodeExecution
             }
         }
     }
-
-    public static class CodeExtensions
-    {
-        public static string GetCompilationCommand(this Code code)
-        {
-            if(!code.Language.CanBeCompiled())
-                throw new InvalidOperationException("Code cannot be compiled");
-            
-            switch (code.Language)
-            {
-                case Language.Pascal:
-                    //command
-                    break;
-                case Language.CPlusPlus:
-                    //command
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(code.Language), code.Language, null);
-            }
-        }
-    }
+    
 }

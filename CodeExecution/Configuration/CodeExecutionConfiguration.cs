@@ -1,4 +1,4 @@
-namespace CodeExecution
+namespace CodeExecution.Configuration
 {
     public class CodeExecutionConfiguration
     {

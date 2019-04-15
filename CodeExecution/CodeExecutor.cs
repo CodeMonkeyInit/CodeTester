@@ -1,82 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using CodeAnalysis;
+using CodeExecution.Compilaton;
+using CodeExecution.Configuration;
+using CodeExecution.Contracts;
+using CodeExecution.Extension;
+using CodeExecutionSystem.Contracts;
+using CodeExecutionSystem.Contracts.Data;
 using DockerIntegration;
 
 namespace CodeExecution
 {
-    public abstract class CompilableCode: ExecutionCode
-    {
-        public abstract Command GetCompilationCommand(string pathToCode);
-        public abstract string GetExecutable(string pathToCode);
-    }
-    
-    public class CPlusPlusCode : CompilableCode
-    {
-        public override Command GetCompilationCommand(string pathToCode)
-        {
-        }
-
-        public override string GetExecutable(string pathToCode)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class PascalCode : CompilableCode
-    {
-        public override Command GetCompilationCommand(string pathToCode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetExecutable(string pathToCode)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-
-    public class CodeCompiler
-    {
-        private readonly CodeExecutionConfiguration _configuration;
-        private readonly DockerContainerExecutor _executor;
-
-        public CodeCompiler(CodeExecutionConfiguration configuration, DockerContainerExecutor executor)
-        {
-            _configuration = configuration;
-            _executor = executor;
-        }
-        public async Task<CompilationResult> CompileCodeAsync(CompilableCode code)
-        {
-            var codeFilename = _configuration.CodeName + code.Language.GetExtension();
-
-            var pathToCode = Path.Combine(code.WorkingDirectory, codeFilename);
-            
-            await File.WriteAllTextAsync(pathToCode, code.Text);
-
-            var compilationCommand = code.GetCompilationCommand(pathToCode);
-
-            var execute = await _executor.ExecuteAsync(compilationCommand);
-
-            if (execute.WasSuccessful)
-            {
-                return new CompilationResult
-                {
-                    OutputPath = pathToCode,
-                    Executable = code.GetExecutable(pathToCode)
-                };
-            }
-            
-            return new CompilationResult
-            {
-                Errors = execute.ErrorOutput
-            };
-        }
-    }
-
     public class CodeExecutor
     {
         private readonly CodeExecutionConfiguration _configuration;
@@ -90,44 +26,109 @@ namespace CodeExecution
             _executor = executor;
         }
 
-        public async Task<CodeExecutionResult> Execute(ExecutionCode code)
+        public async Task<CodeExecutionResult> ExecuteAsync(ExecutableCode testingCode)
         {
             //Create Environment
-            var executingCodeFolder = Path.Combine(_configuration.TempFolderPath, Guid.NewGuid().ToString());
-            
-            
-            
-            //
+            var environmentPath = await CreateEnvironment(testingCode);
 
             //Compile
-            if (code is CompilableCode compilableCode)
+            if (testingCode is CompilableCode compilableCode)
             {
                 CompilationResult compilationResult = await _compiler.CompileCodeAsync(compilableCode);
-                
+
+                if (!compilationResult.WasSuccessful)
+                {
+                    return new CodeExecutionResult
+                    {
+                        CompilationErrors = compilationResult.Errors
+                    };
+                }
             }
             
             //Create Execution Environment
 
-            await _executor.ExecuteAsync(new Command {Name = code.Text});
+            var executionResults = await RunAsync(testingCode, environmentPath);
 
-            //Execute
-
-
-            //Remove Environment
+            return new CodeExecutionResult
+            {
+                Results = executionResults
+            };
         }
-    }
 
-    public class ExecutionCode : Code
-    {
-        public string[] InputData { get; set; }
+        private async Task<TestRunResult[]> RunAsync(ExecutableCode testingCode, string environmentPath)
+        {
+            var binariesFolder = Path.Combine(environmentPath, "bin");
 
-        public string[] OutputData { get; set; }
-    }
+            Directory.Move(environmentPath, binariesFolder);
 
-    public class CodeExecutionResult
-    {
-         
-        
-        public string[] CompilationErrors { get; set; }
+            var codeExecutionResultsTasks =
+                testingCode.ExecutionData.Select(executionData => RunAsync(executionData, environmentPath, binariesFolder, testingCode));
+
+            TestRunResult[] executionResults = await Task.WhenAll(codeExecutionResultsTasks);
+
+            Directory.Delete(environmentPath);
+            return executionResults;
+        }
+
+        private async Task<TestRunResult> RunAsync(ExecutionData executionData, string environmentPath,
+            string binariesFolder, ExecutableCode testingCode)
+        {
+            var testRunEnvironment = Path.Combine(environmentPath, Guid.NewGuid().ToString());
+
+            Copy(binariesFolder, testRunEnvironment);
+
+            var containerExecutionResult = await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment));
+
+            var outputFile = Path.Combine(testRunEnvironment, "output.txt");
+            return new TestRunResult
+            {
+                ExecutionResult = containerExecutionResult.Result,
+                ExpectedOutput = executionData.OutputData,
+                UserOutput = await GetUserOutput(outputFile, containerExecutionResult)
+            };
+        }
+
+        private static async Task<string> GetUserOutput(string outputFile, ContainerExecutionResult containerExecutionResult)
+        {
+            return File.Exists(outputFile) ? await File.ReadAllTextAsync(outputFile) : containerExecutionResult.StandardOutput;
+        }
+
+        private async Task<string> CreateEnvironment(ExecutableCode testingCode)
+        {
+            var executingCodeFolder = Path.Combine(_configuration.TempFolderPath, Guid.NewGuid().ToString());
+            var codePath = Path.Combine(executingCodeFolder, _configuration.CodeName, testingCode.Language.GetExtension());
+
+            testingCode.WorkingDirectory = executingCodeFolder;
+
+            await File.WriteAllTextAsync(codePath, testingCode.Text);
+            return executingCodeFolder;
+        }
+
+        public static void Copy(string sourceDirectory, string targetDirectory)
+        {
+            DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
+            DirectoryInfo diTarget = new DirectoryInfo(targetDirectory);
+
+            CopyAll(diSource, diTarget);
+        }
+
+        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+
+            // Copy each file into the new directory.
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
     }
 }

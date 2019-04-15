@@ -1,7 +1,4 @@
-using System;
-using CodeExecutionSystem.Contracts;
-
-namespace CodeAnalysis
+namespace CodeExecutionSystem.Contracts.Data
 {
     public abstract class Code
     {
@@ -10,7 +7,5 @@ namespace CodeAnalysis
         public string Text { get; set; }
 
         public Language Language { get; set; }
-
-        public string WorkingDirectory { get; set; } = string.Empty;
     }
 }

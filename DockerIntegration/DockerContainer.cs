@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,18 +25,34 @@ namespace DockerIntegration
 
         public async Task<ContainerExecutionResult> RunAsync(Command command)
         {
-            _createContainerResponse = await _client.Containers.CreateContainerAsync(
-                new CreateContainerParameters
+            var createContainerParameters = new CreateContainerParameters
+            {
+                Image = _configuration.ImageName,
+                Tty = true,
+                AttachStdin = true,
+                Cmd = command.ProgramNameWithArguments,
+                HostConfig = new HostConfig
                 {
-                    Image = _configuration.ImageName,
-                    Tty = true,
-                    AttachStdin = true,
-                    HostConfig = new HostConfig
-                    {
-                        Memory = command.Limits.MemoryLimitInBytes
-                    }
-                });
+                    Memory = command.Limits.MemoryLimitInBytes,      
+                }
+            };
 
+            if (string.IsNullOrWhiteSpace(command.WorkingDirectory))
+            {
+                createContainerParameters.HostConfig.Mounts = new List<Mount>
+                {
+                    new Mount
+                    {
+                        Type = "bind",
+                        Source = command.WorkingDirectory,
+                        Target = _configuration.DockerWorkingDir
+                    }
+                };
+            }
+            
+            _createContainerResponse = await _client.Containers.CreateContainerAsync(
+                createContainerParameters);
+            
             await _client.Containers.StartContainerAsync(_createContainerResponse.ID, new ContainerStartParameters());
 
             await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs));

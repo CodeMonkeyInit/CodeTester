@@ -1,45 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using CodeExecution;
+using CodeExecution.Contracts;
+using CodeExecutionSystem.Contracts.Abstractions;
+using CodeExecutionSystem.Contracts.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
-    public class CodeExecutionController : ControllerBase
+    public class CodeExecutionController : ControllerBase, ICodeExecutionApi
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] {"value1", "value2"};
-        }
+        private readonly CodeExecutor _codeExecutor;
+        private readonly ExecutableCodeFactory _codeFactory;
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public CodeExecutionController(CodeExecutor codeExecutor, ExecutableCodeFactory codeFactory)
         {
-            return "value";
+            _codeExecutor = codeExecutor;
+            _codeFactory = codeFactory;
         }
-
+        
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<CodeExecutionResult> ExecuteCodeAsync(TestingCode code)
         {
-        }
+            var executableCode = _codeFactory.GetExecutableCode(code);
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return await _codeExecutor.ExecuteAsync(executableCode);
         }
     }
 }

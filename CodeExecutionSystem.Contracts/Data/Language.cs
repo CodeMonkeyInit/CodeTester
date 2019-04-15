@@ -1,4 +1,4 @@
-namespace CodeExecutionSystem.Contracts
+namespace CodeExecutionSystem.Contracts.Data
 {
     public enum Language
     {

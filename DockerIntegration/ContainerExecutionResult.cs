@@ -1,3 +1,5 @@
+using CodeExecutionSystem.Contracts.Data;
+
 namespace DockerIntegration
 {
     public class ContainerExecutionResult

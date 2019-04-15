@@ -2,6 +2,9 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using CodeExecution;
+using CodeExecution.Extension;
+using CodeExecutionSystem.Contracts.Data;
 using DockerIntegration;
 
 namespace CodeAnalysis
@@ -47,7 +50,7 @@ namespace CodeAnalysis
         {
             var tempFolder = Path.Combine(Configuration.TempFolderPath, Guid.NewGuid().ToString());
 
-            await File.WriteAllTextAsync(Path.Combine(tempFolder, Configuration.FileName), code.Text);
+            await File.WriteAllTextAsync(Path.Combine(tempFolder, Configuration.FileName + code.Language.GetExtension()), code.Text);
             
             var codeAnalysis = await AnalyzeCode(code);
             
@@ -63,6 +66,6 @@ namespace CodeAnalysis
     {
         public string TempFolderPath { get; set; }
 
-        public string FileName { get; set; } = "code.txt";
+        public string FileName { get; set; } = "code";
     }
 }

@@ -6,7 +6,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DockerIntegration\DockerIntegration.csproj" />
-      <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     </ItemGroup>
 
 </Project>
