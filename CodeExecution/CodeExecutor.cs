@@ -64,7 +64,7 @@ namespace CodeExecution
 
             var executionResults = await Task.WhenAll(codeExecutionResultsTasks);
 
-            Directory.Delete(environmentPath);
+            Directory.Delete(environmentPath, true);
             return executionResults;
         }
 
