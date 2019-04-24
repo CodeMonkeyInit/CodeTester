@@ -104,6 +104,8 @@ namespace CodeExecution
 
             testingCode.WorkingDirectory = executingCodeFolder;
 
+            Directory.CreateDirectory(testingCode.WorkingDirectory);
+
             await File.WriteAllTextAsync(codePath, testingCode.Text);
             return executingCodeFolder;
         }
