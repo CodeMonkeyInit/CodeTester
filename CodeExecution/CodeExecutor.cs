@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using CodeExecution.Compilaton;
 using CodeExecution.Configuration;
 using CodeExecution.Contracts;
 using CodeExecution.Extension;
-using CodeExecutionSystem.Contracts;
 using CodeExecutionSystem.Contracts.Data;
 using DockerIntegration;
 
@@ -15,11 +13,12 @@ namespace CodeExecution
 {
     public class CodeExecutor
     {
-        private readonly CodeExecutionConfiguration _configuration;
         private readonly CodeCompiler _compiler;
+        private readonly CodeExecutionConfiguration _configuration;
         private readonly DockerContainerExecutor _executor;
 
-        public CodeExecutor(CodeExecutionConfiguration configuration, CodeCompiler compiler, DockerContainerExecutor executor)
+        public CodeExecutor(CodeExecutionConfiguration configuration, CodeCompiler compiler,
+            DockerContainerExecutor executor)
         {
             _configuration = configuration;
             _compiler = compiler;
@@ -34,17 +33,15 @@ namespace CodeExecution
             //Compile
             if (testingCode is CompilableCode compilableCode)
             {
-                CompilationResult compilationResult = await _compiler.CompileCodeAsync(compilableCode);
+                var compilationResult = await _compiler.CompileCodeAsync(compilableCode);
 
                 if (!compilationResult.WasSuccessful)
-                {
                     return new CodeExecutionResult
                     {
                         CompilationErrors = compilationResult.Errors
                     };
-                }
             }
-            
+
             //Create Execution Environment
 
             var executionResults = await RunAsync(testingCode, environmentPath);
@@ -62,9 +59,10 @@ namespace CodeExecution
             Directory.Move(environmentPath, binariesFolder);
 
             var codeExecutionResultsTasks =
-                testingCode.ExecutionData.Select(executionData => RunAsync(executionData, environmentPath, binariesFolder, testingCode));
+                testingCode.ExecutionData.Select(executionData =>
+                    RunAsync(executionData, environmentPath, binariesFolder, testingCode));
 
-            TestRunResult[] executionResults = await Task.WhenAll(codeExecutionResultsTasks);
+            var executionResults = await Task.WhenAll(codeExecutionResultsTasks);
 
             Directory.Delete(environmentPath);
             return executionResults;
@@ -77,7 +75,8 @@ namespace CodeExecution
 
             Copy(binariesFolder, testRunEnvironment);
 
-            var containerExecutionResult = await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment));
+            var containerExecutionResult =
+                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment));
 
             var outputFile = Path.Combine(testRunEnvironment, "output.txt");
             return new TestRunResult
@@ -88,15 +87,20 @@ namespace CodeExecution
             };
         }
 
-        private static async Task<string> GetUserOutput(string outputFile, ContainerExecutionResult containerExecutionResult)
+        private static async Task<string> GetUserOutput(string outputFile,
+            ContainerExecutionResult containerExecutionResult)
         {
-            return File.Exists(outputFile) ? await File.ReadAllTextAsync(outputFile) : containerExecutionResult.StandardOutput;
+            return File.Exists(outputFile)
+                ? await File.ReadAllTextAsync(outputFile)
+                : containerExecutionResult.StandardOutput;
         }
 
         private async Task<string> CreateEnvironment(ExecutableCode testingCode)
         {
             var executingCodeFolder = Path.Combine(_configuration.TempFolderPath, Guid.NewGuid().ToString());
-            var codePath = Path.Combine(executingCodeFolder, _configuration.CodeName, testingCode.Language.GetExtension());
+
+            var codePath = Path.Combine(executingCodeFolder,
+                $"{_configuration.CodeName}{testingCode.Language.GetExtension()}");
 
             testingCode.WorkingDirectory = executingCodeFolder;
 
@@ -106,8 +110,8 @@ namespace CodeExecution
 
         public static void Copy(string sourceDirectory, string targetDirectory)
         {
-            DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
-            DirectoryInfo diTarget = new DirectoryInfo(targetDirectory);
+            var diSource = new DirectoryInfo(sourceDirectory);
+            var diTarget = new DirectoryInfo(targetDirectory);
 
             CopyAll(diSource, diTarget);
         }
@@ -117,15 +121,12 @@ namespace CodeExecution
             Directory.CreateDirectory(target.FullName);
 
             // Copy each file into the new directory.
-            foreach (FileInfo fi in source.GetFiles())
-            {
-                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
-            }
+            foreach (var fi in source.GetFiles()) fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
 
             // Copy each subdirectory using recursion.
-            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            foreach (var diSourceSubDir in source.GetDirectories())
             {
-                DirectoryInfo nextTargetSubDir =
+                var nextTargetSubDir =
                     target.CreateSubdirectory(diSourceSubDir.Name);
                 CopyAll(diSourceSubDir, nextTargetSubDir);
             }

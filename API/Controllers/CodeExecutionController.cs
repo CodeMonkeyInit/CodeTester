@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using CodeExecution;
 using CodeExecution.Contracts;
 using CodeExecutionSystem.Contracts.Abstractions;
@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    
     [Route("api/[controller]")]
     [ApiController]
     public class CodeExecutionController : ControllerBase, ICodeExecutionApi
@@ -20,7 +19,7 @@ namespace API.Controllers
             _codeExecutor = codeExecutor;
             _codeFactory = codeFactory;
         }
-        
+
         // POST api/values
         [HttpPost]
         public async Task<CodeExecutionResult> ExecuteCodeAsync(TestingCode code)
