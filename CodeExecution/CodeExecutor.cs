@@ -56,7 +56,7 @@ namespace CodeExecution
         {
             var binariesFolder = Path.Combine(environmentPath, "bin");
 
-            Directory.Move(environmentPath, binariesFolder);
+            Copy(environmentPath, binariesFolder);
 
             var codeExecutionResultsTasks =
                 testingCode.ExecutionData.Select(executionData =>
@@ -127,11 +127,12 @@ namespace CodeExecution
 
             // Copy each subdirectory using recursion.
             foreach (var diSourceSubDir in source.GetDirectories())
-            {
-                var nextTargetSubDir =
-                    target.CreateSubdirectory(diSourceSubDir.Name);
-                CopyAll(diSourceSubDir, nextTargetSubDir);
-            }
+                if (diSourceSubDir.FullName != target.FullName)
+                {
+                    var nextTargetSubDir =
+                        target.CreateSubdirectory(diSourceSubDir.Name);
+                    CopyAll(diSourceSubDir, nextTargetSubDir);
+                }
         }
     }
 }
