@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -37,7 +38,7 @@ namespace DockerIntegration
                 }
             };
 
-            if (string.IsNullOrWhiteSpace(command.WorkingDirectory))
+            if (!string.IsNullOrWhiteSpace(command.WorkingDirectory))
             {
                 createContainerParameters.HostConfig.Mounts = new List<Mount>
                 {
@@ -57,8 +58,9 @@ namespace DockerIntegration
 
             await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs));
             
+            var containers = await GetContainersAsync();
             
-            if(await IsAliveAsync())
+            if(containers.Any(container => container.ID == _createContainerResponse.ID))
             {
                 _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now", _createContainerResponse);
                 
@@ -79,8 +81,11 @@ namespace DockerIntegration
             };
         }
 
-        public async Task<bool> IsAliveAsync() => 
-            await _client.Containers.InspectContainerAsync(_createContainerResponse.ID) != null;
+        public async Task<IList<ContainerListResponse>> GetContainersAsync() 
+        {
+            var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters());
+            return containers;
+        }
 
         public async Task<string> GetContainerLogsAsync(ContainerLogsParameters logsParameters)
         {

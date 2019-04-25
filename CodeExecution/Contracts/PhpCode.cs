@@ -9,11 +9,11 @@ namespace CodeExecution.Contracts
         {
         }
 
-        public override Command GetExecutionCommand(string workingDirectory) =>
+        public override Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory) =>
             new Command
             {
                 Name = "php",
-                Arguments = new[] {GetCodeFilePath(workingDirectory)},
+                Arguments = new[] {GetCodeFilePath(dockerWorkingDirectory)},
                 WorkingDirectory = workingDirectory,
                 Limits = Limits
             };

@@ -15,13 +15,16 @@ namespace CodeExecution
     {
         private readonly CodeCompiler _compiler;
         private readonly CodeExecutionConfiguration _configuration;
+
+        private readonly ContainerConfiguration _containerConfiguration;
         private readonly DockerContainerExecutor _executor;
 
         public CodeExecutor(CodeExecutionConfiguration configuration, CodeCompiler compiler,
-            DockerContainerExecutor executor)
+            DockerContainerExecutor executor, ContainerConfiguration containerConfiguration)
         {
             _configuration = configuration;
             _compiler = compiler;
+            _containerConfiguration = containerConfiguration;
             _executor = executor;
         }
 
@@ -76,7 +79,7 @@ namespace CodeExecution
             Copy(binariesFolder, testRunEnvironment);
 
             var containerExecutionResult =
-                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment));
+                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment, _containerConfiguration.DockerWorkingDir));
 
             var outputFile = Path.Combine(testRunEnvironment, "output.txt");
             return new TestRunResult

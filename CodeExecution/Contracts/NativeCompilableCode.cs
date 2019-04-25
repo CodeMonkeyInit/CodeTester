@@ -12,7 +12,7 @@ namespace CodeExecution.Contracts
         {
         }
 
-        public override Command GetExecutionCommand(string workingDirectory) =>
+        public override Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory) =>
             new Command
             {
                 Name = GetExecutablePath(workingDirectory),
