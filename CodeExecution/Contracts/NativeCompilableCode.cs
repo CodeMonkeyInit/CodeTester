@@ -3,21 +3,25 @@ using DockerIntegration;
 
 namespace CodeExecution.Contracts
 {
-    public abstract class NativeCompilableCode: CompilableCode
+    public abstract class NativeCompilableCode : CompilableCode
     {
-        public override string GetExecutable(string workingDirectory) => GetExecutablePath(workingDirectory);
-
-
         protected NativeCompilableCode(CodeExecutionConfiguration configuration) : base(configuration)
         {
         }
 
-        public override Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory) =>
-            new Command
+        public override string GetExecutable(string workingDirectory)
+        {
+            return GetExecutablePath(workingDirectory);
+        }
+
+        public override Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory)
+        {
+            return new Command
             {
-                Name = GetExecutablePath(workingDirectory),
+                Name = GetExecutablePath(dockerWorkingDirectory),
                 Limits = Limits,
                 WorkingDirectory = workingDirectory
             };
+        }
     }
 }
