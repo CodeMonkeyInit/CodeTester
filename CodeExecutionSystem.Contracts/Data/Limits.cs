@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using ByteSizeLib;
+using Helpers;
 
 namespace CodeExecutionSystem.Contracts.Data
 {

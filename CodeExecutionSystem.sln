@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerIntegration", "Docker
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeExecution", "CodeExecution\CodeExecution.csproj", "{0C348905-76BA-4B7F-AEF9-E7B9685D1753}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C348905-76BA-4B7F-AEF9-E7B9685D1753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
