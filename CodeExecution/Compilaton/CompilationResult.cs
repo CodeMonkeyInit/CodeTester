@@ -8,7 +8,7 @@ namespace CodeExecution.Compilaton
 
         public string ExecutablePath { get; set; }
 
-        public string[] Errors { get; set; }
+        public string[] Errors { get; set; } = new string[0];
 
         public bool WasSuccessful => !Errors.Any();
     }
