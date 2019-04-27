@@ -8,7 +8,15 @@ namespace CodeExecution.Contracts
     {
         public override Command GetCompilationCommand(string workingDirectory, string dockerDirectory)
         {
-            throw new NotImplementedException();
+            return new Command
+            {
+                Name = "fpc",
+                Arguments = new[]
+                {
+                    GetCodeFilePath(dockerDirectory)
+                },
+                WorkingDirectory = workingDirectory
+            };
         }
 
 

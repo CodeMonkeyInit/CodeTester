@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CodeExecution.Configuration;
 using CodeExecution.Contracts;
@@ -27,13 +28,13 @@ namespace CodeExecution.Compilaton
 
             var pathToCode = Path.Combine(code.WorkingDirectory, codeFilename);
             
-            await File.WriteAllTextAsync(pathToCode, code.Text);
+            //await File.WriteAllTextAsync(pathToCode, code.Text);
 
             var compilationCommand = code.GetCompilationCommand(code.WorkingDirectory, _containerConfiguration.DockerWorkingDir);
 
             var execute = await _executor.ExecuteAsync(compilationCommand);
 
-            if (execute.WasSuccessful)
+            if (execute.WasSuccessful && (!(code is CPlusPlusCode) || string.IsNullOrWhiteSpace(execute.StandardOutput)))
             {
                 return new CompilationResult
                 {
@@ -44,7 +45,9 @@ namespace CodeExecution.Compilaton
             
             return new CompilationResult
             {
-                Errors = execute.ErrorOutput.Split(Environment.NewLine)
+                Errors =  execute.ErrorOutput.Split(Environment.NewLine)
+                .Union(execute.StandardOutput.Split(Environment.NewLine))
+                .ToArray()
             };
         }
     }
