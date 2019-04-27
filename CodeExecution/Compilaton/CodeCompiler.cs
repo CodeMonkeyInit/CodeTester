@@ -11,11 +11,14 @@ namespace CodeExecution.Compilaton
     public class CodeCompiler
     {
         private readonly CodeExecutionConfiguration _configuration;
+        private readonly ContainerConfiguration _containerConfiguration;
         private readonly DockerContainerExecutor _executor;
 
-        public CodeCompiler(CodeExecutionConfiguration configuration, DockerContainerExecutor executor)
+        public CodeCompiler(CodeExecutionConfiguration configuration, ContainerConfiguration containerConfiguration,
+         DockerContainerExecutor executor)
         {
             _configuration = configuration;
+            _containerConfiguration = containerConfiguration;
             _executor = executor;
         }
         public async Task<CompilationResult> CompileCodeAsync(CompilableCode code)
@@ -26,7 +29,7 @@ namespace CodeExecution.Compilaton
             
             await File.WriteAllTextAsync(pathToCode, code.Text);
 
-            var compilationCommand = code.GetCompilationCommand(code.WorkingDirectory);
+            var compilationCommand = code.GetCompilationCommand(code.WorkingDirectory, _containerConfiguration.DockerWorkingDir);
 
             var execute = await _executor.ExecuteAsync(compilationCommand);
 

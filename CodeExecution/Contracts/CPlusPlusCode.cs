@@ -6,18 +6,19 @@ namespace CodeExecution.Contracts
     public class CPlusPlusCode : NativeCompilableCode
     {
         
-        public override Command GetCompilationCommand(string workingDirectory)
+        public override Command GetCompilationCommand(string workingDirectory, string dockerDirectory)
         {
             return new Command
             {
                 Name = "g++",
                 Arguments = new []
                 {
-                    GetCodeFilePath(workingDirectory),
+                    GetCodeFilePath(dockerDirectory),
                     "-o",
-                    GetExecutablePath(workingDirectory)
+                    GetExecutablePath(dockerDirectory)
                 },
-                WorkingDirectory = workingDirectory
+                WorkingDirectory = workingDirectory,
+                Limits 
             };
         }
 

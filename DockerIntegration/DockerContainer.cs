@@ -60,6 +60,8 @@ namespace DockerIntegration
             
             var containers = await GetContainersAsync();
             
+
+            //TODO add spinning to check if container is done
             if(containers.Any(container => container.ID == _createContainerResponse.ID))
             {
                 _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now", _createContainerResponse);

@@ -7,7 +7,7 @@ namespace CodeExecution.Contracts
 {
     public abstract class CompilableCode : ExecutableCode
     {
-        public abstract Command GetCompilationCommand(string workingDirectory);
+        public abstract Command GetCompilationCommand(string workingDirectory, string dockerDirectory);
 
         public abstract string GetExecutable(string workingDirectory);
 

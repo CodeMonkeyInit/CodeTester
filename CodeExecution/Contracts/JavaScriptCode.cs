@@ -13,7 +13,7 @@ namespace CodeExecution.Contracts
             new Command
             {
                 Name = "node",
-                Arguments = new[] {GetCodeFilePath(workingDirectory)},
+                Arguments = new[] {GetCodeFilePath(dockerWorkingDirectory)},
                 Limits = Limits,
                 WorkingDirectory = workingDirectory
             };
