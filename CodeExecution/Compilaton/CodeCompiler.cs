@@ -28,13 +28,11 @@ namespace CodeExecution.Compilaton
 
             var pathToCode = Path.Combine(code.WorkingDirectory, codeFilename);
             
-            //await File.WriteAllTextAsync(pathToCode, code.Text);
-
             var compilationCommand = code.GetCompilationCommand(code.WorkingDirectory, _containerConfiguration.DockerWorkingDir);
 
             var execute = await _executor.ExecuteAsync(compilationCommand);
 
-            if (execute.WasSuccessful && (!(code is CPlusPlusCode) || string.IsNullOrWhiteSpace(execute.StandardOutput)))
+            if (execute.WasSuccessful)
             {
                 return new CompilationResult
                 {
@@ -46,8 +44,8 @@ namespace CodeExecution.Compilaton
             return new CompilationResult
             {
                 Errors =  execute.ErrorOutput.Split(Environment.NewLine)
-                .Union(execute.StandardOutput.Split(Environment.NewLine))
-                .ToArray()
+                    .Union(execute.StandardOutput.Split(Environment.NewLine))
+                    .ToArray()
             };
         }
     }

@@ -4,6 +4,8 @@ namespace DockerIntegration
 {
     public class ContainerExecutionResult
     {
+        public long ExitCode { get; set; }
+        
         public ExecutionResult Result { get; set; }
         
         public string StandardOutput { get; set; }
@@ -14,6 +16,6 @@ namespace DockerIntegration
         
         public static ContainerExecutionResult KilledByMemoryLimit => new ContainerExecutionResult {Result = ExecutionResult.KilledByMemoryLimit};
 
-        public bool WasSuccessful => Result == ExecutionResult.Success && string.IsNullOrWhiteSpace(ErrorOutput);
+        public bool WasSuccessful => ExitCode == 0 && Result == ExecutionResult.Success && string.IsNullOrWhiteSpace(ErrorOutput);
     }
 }

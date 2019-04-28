@@ -58,11 +58,10 @@ namespace DockerIntegration
 
             await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs));
             
-            var containers = await GetContainersAsync();
+             var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
             
-
             //TODO add spinning to check if container is done
-            if(containers.Any(container => container.ID == _createContainerResponse.ID))
+            if(containerInspection.State.Running)
             {
                 _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now", _createContainerResponse);
                 
@@ -78,6 +77,7 @@ namespace DockerIntegration
 
             return new ContainerExecutionResult
             {
+                ExitCode = containerInspection.State.ExitCode,
                 ErrorOutput = await errorOutputTask,
                 StandardOutput = await standardOutputTask
             };
