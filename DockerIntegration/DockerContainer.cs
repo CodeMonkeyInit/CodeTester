@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Linq;
 using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -17,7 +16,8 @@ namespace DockerIntegration
         private readonly ILogger<DockerContainer> _logger;
         private CreateContainerResponse _createContainerResponse;
 
-        public DockerContainer(DockerClient client, ContainerConfiguration configuration, ILogger<DockerContainer> logger)
+        public DockerContainer(DockerClient client, ContainerConfiguration configuration,
+            ILogger<DockerContainer> logger)
         {
             _client = client;
             _configuration = configuration;
@@ -34,7 +34,7 @@ namespace DockerIntegration
                 Cmd = command.ProgramNameWithArguments,
                 HostConfig = new HostConfig
                 {
-                    Memory = command.Limits.MemoryLimitInBytes,      
+                    Memory = command.Limits.MemoryLimitInBytes,
                 }
             };
 
@@ -50,30 +50,33 @@ namespace DockerIntegration
                     }
                 };
             }
-            
+
             _createContainerResponse = await _client.Containers.CreateContainerAsync(
                 createContainerParameters);
-            
+
             await _client.Containers.StartContainerAsync(_createContainerResponse.ID, new ContainerStartParameters());
 
             await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs));
-            
-             var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
-            
+
+            var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
+
             //TODO add spinning to check if container is done
-            if(containerInspection.State.Running)
+            if (containerInspection.State.Running)
             {
-                _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now", _createContainerResponse);
-                
+                _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now",
+                    _createContainerResponse);
+
                 await _client.Containers.KillContainerAsync(_createContainerResponse.ID, new ContainerKillParameters());
 
                 return ContainerExecutionResult.KilledByTimeout;
             }
-            
-            //TODO add killed by memory limit
+
+            if (containerInspection.State.OOMKilled)
+                return ContainerExecutionResult.KilledByMemoryLimit;
+
 
             var errorOutputTask = GetContainerLogsAsync(new ContainerLogsParameters {ShowStderr = true});
-            var standardOutputTask =  GetContainerLogsAsync(new ContainerLogsParameters{ShowStdout = true});
+            var standardOutputTask = GetContainerLogsAsync(new ContainerLogsParameters {ShowStdout = true});
 
             return new ContainerExecutionResult
             {
@@ -83,7 +86,7 @@ namespace DockerIntegration
             };
         }
 
-        public async Task<IList<ContainerListResponse>> GetContainersAsync() 
+        public async Task<IList<ContainerListResponse>> GetContainersAsync()
         {
             var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters());
             return containers;
