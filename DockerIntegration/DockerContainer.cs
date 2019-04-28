@@ -93,8 +93,11 @@ namespace DockerIntegration
 
             using (timer)
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs),
-                    cancellationTokenSource.Token);
+                try
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs), cancellationTokenSource.Token);
+                }
+                catch(TaskCanceledException){}
             }
 
             var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
