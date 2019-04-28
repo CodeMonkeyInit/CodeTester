@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -56,20 +57,12 @@ namespace DockerIntegration
 
             await _client.Containers.StartContainerAsync(_createContainerResponse.ID, new ContainerStartParameters());
 
-            await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs));
+
+            if (await TryKillContainerAfterTimeout(command))
+                return ContainerExecutionResult.KilledByMemoryLimit;
 
             var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
 
-            //TODO add spinning to check if container is done
-            if (containerInspection.State.Running)
-            {
-                _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now",
-                    _createContainerResponse);
-
-                await _client.Containers.KillContainerAsync(_createContainerResponse.ID, new ContainerKillParameters());
-
-                return ContainerExecutionResult.KilledByTimeout;
-            }
 
             if (containerInspection.State.OOMKilled)
                 return ContainerExecutionResult.KilledByMemoryLimit;
@@ -84,6 +77,37 @@ namespace DockerIntegration
                 ErrorOutput = await errorOutputTask,
                 StandardOutput = await standardOutputTask
             };
+        }
+
+        private async Task<bool> TryKillContainerAfterTimeout(Command command)
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            var timer = new Timer(async state =>
+            {
+                var containerInspect = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
+
+                if (!containerInspect.State.Running && !cancellationTokenSource.IsCancellationRequested)
+                    cancellationTokenSource.Cancel();
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(_configuration.TimeBetweenContainerStatusChecksInMs));
+
+            using (timer)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(command.Limits.TimeLimitInMs),
+                    cancellationTokenSource.Token);
+            }
+
+            var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
+
+            if (!containerInspection.State.Running)
+                return false;
+
+            _logger.LogWarning($"Container with id {_createContainerResponse.ID} throze. Killing it now",
+                _createContainerResponse);
+
+            await _client.Containers.KillContainerAsync(_createContainerResponse.ID, new ContainerKillParameters());
+
+            return true;
         }
 
         public async Task<IList<ContainerListResponse>> GetContainersAsync()
