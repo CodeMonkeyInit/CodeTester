@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeExecution", "CodeExecut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeExecutionSystem.Client", "CodeExecutionSystem.Client\CodeExecutionSystem.Client.csproj", "{ED0CB25B-6A7C-4B90-91D6-E87132970DA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A55BC44B-CA4E-4DF0-9CA2-B2740A4AE539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED0CB25B-6A7C-4B90-91D6-E87132970DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0CB25B-6A7C-4B90-91D6-E87132970DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0CB25B-6A7C-4B90-91D6-E87132970DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0CB25B-6A7C-4B90-91D6-E87132970DA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
