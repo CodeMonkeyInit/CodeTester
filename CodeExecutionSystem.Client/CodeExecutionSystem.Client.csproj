@@ -2,6 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <PackageId>CodeExecutionSystem.Client</PackageId>
+        <Version>0.0.6</Version>
+        <Authors>CodeMonkeyJr</Authors>
+        <Company>ShitCode ©</Company>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>

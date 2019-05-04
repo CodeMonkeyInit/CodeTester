@@ -15,6 +15,8 @@ namespace CodeExecution.Contracts
             Configuration = configuration;
         }
 
+        public string WorkingDirectory { get; set; } = string.Empty;
+
         public abstract Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory);
 
         protected string GetExecutablePath(string workingDirectory)

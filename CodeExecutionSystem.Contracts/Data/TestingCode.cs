@@ -5,6 +5,5 @@ namespace CodeExecutionSystem.Contracts.Data
         public ExecutionData[] ExecutionData { get; set; }
 
         public Limits Limits { get; set; } = new Limits();
-        public string WorkingDirectory { get; set; } = string.Empty;
     }
 }
