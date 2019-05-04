@@ -11,10 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CodeExecutionSystem.Contracts\CodeExecutionSystem.Contracts.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
+        <PackageReference Include="CodeExecutionSystem.Contracts" Version="0.0.7"/>
         <PackageReference Include="Flurl.Http" Version="2.4.2"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0"/>
