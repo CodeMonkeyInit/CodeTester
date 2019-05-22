@@ -1,6 +1,8 @@
 ﻿using System;
 using AutoMapper;
+using CodeAnalysis.Extensions;
 using CodeExecution.Extension;
+using DockerIntegration.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +23,15 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCodeExecution(new Uri("unix:///var/run/docker.sock"), Configuration);
+            services
+                .AddDocker(new Uri(Configuration["ContainerConfiguration:DockerEngineUri"]), Configuration)
+                .AddCodeExecution(Configuration)
+                .AddCodeAnalysis(Configuration)
+                .AddAutoMapper();
 
-            services.AddAutoMapper();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

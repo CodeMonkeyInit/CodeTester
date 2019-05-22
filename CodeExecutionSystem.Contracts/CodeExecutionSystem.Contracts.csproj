@@ -16,12 +16,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Helpers\Helpers.csproj" PrivateAssets="All"/>
+        <ProjectReference Include="..\Helpers\Helpers.csproj" PrivateAssets="All" />
     </ItemGroup>
 
     <Target Name="IncludeP2PAssets">
         <ItemGroup>
-            <BuildOutputInPackage Include="$(OutputPath)Helpers.dll"/>
+            <BuildOutputInPackage Include="$(OutputPath)Helpers.dll" />
         </ItemGroup>
     </Target>
 

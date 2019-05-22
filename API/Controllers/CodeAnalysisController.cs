@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CodeAnalysis;
+using CodeAnalysis.CodeAnalyzers;
+using CodeAnalysis.CodeAnalyzers.Base;
 using CodeExecutionSystem.Contracts.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +9,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CodeAnalyzerController : ControllerBase
+    public class CodeAnalysisController : ControllerBase
     {
         private readonly CodeAnalyzerFactory _codeAnalyzerFactory;
 
-        public CodeAnalyzerController(CodeAnalyzerFactory codeAnalyzerFactory)
+        public CodeAnalysisController(CodeAnalyzerFactory codeAnalyzerFactory)
         {
             _codeAnalyzerFactory = codeAnalyzerFactory;
         }

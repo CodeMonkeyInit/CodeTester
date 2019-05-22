@@ -1,4 +1,4 @@
-namespace CodeAnalysis
+namespace CodeAnalysis.Configuration
 {
     public class AnalysisConfiguration
     {
