@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj"/>
       <ProjectReference Include="..\CodeExecution\CodeExecution.csproj" />
     </ItemGroup>
 

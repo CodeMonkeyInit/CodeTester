@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <PackageId>CodeExecutionSystem.Client</PackageId>
-        <Version>0.0.7.1</Version>
+        <Version>0.0.7.2</Version>
         <Authors>CodeMonkeyJr</Authors>
         <Company>ShitCode ©</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeExecutionSystem.Contracts" Version="0.0.7.1"/>
+        <PackageReference Include="CodeExecutionSystem.Contracts" Version="0.0.7.2"/>
         <PackageReference Include="Flurl.Http" Version="2.4.2"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0"/>
