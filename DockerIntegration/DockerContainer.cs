@@ -33,6 +33,7 @@ namespace DockerIntegration
                 Tty = true,
                 AttachStdin = true,
                 Cmd = command.ProgramNameWithArguments,
+                Env = command.EnvironmentVariables,
                 HostConfig = new HostConfig
                 {
                     Memory = command.Limits.MemoryLimitInBytes,

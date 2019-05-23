@@ -15,6 +15,7 @@ namespace CodeAnalysis.Extensions
                 .Configure<AnalysisConfiguration>(configuration.GetSection(nameof(AnalysisConfiguration)))
                 .AddScoped(provider => provider.GetRequiredService<IOptionsSnapshot<AnalysisConfiguration>>().Value)
                 .AddScoped<PhpCodeAnalyzer>() 
+                .AddScoped<PascalCodeAnalyzer>()
                 .AddScoped<JavaScriptCodeAnalyzer>()
                 .AddScoped<CPlusPlusCodeAnalyzer>();
     }

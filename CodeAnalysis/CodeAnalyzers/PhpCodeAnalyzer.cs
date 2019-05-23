@@ -46,22 +46,11 @@ namespace CodeAnalysis.CodeAnalyzers
                 };
             }
 
-            var strings = containerExecutionResult.StandardOutput
-                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                .Select(output => output.Trim());
+            var strings = containerExecutionResult.StandardOutputSplit;
             
             var errors = strings.Where(output => output.Contains(PhpError)).Select(GetError).ToArray();
 
-            if (errors.Any())
-            {
-                return new CodeAnalysisResult
-                {
-                    AnalysisResults = errors,
-                    IsSuccessful = false
-                };
-            }
-            
-            return CodeAnalysisResult.ValidCode;
+            return GetCodeAnalysisResult(errors, Enumerable.Empty<AnalysisResult>());
         }
 
         public PhpCodeAnalyzer(AnalysisConfiguration configuration, ExecutableCodeFactory codeFactory,

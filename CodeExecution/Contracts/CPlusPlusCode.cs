@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CodeExecution.Configuration;
 using DockerIntegration;
 
@@ -20,6 +21,7 @@ namespace CodeExecution.Contracts
                     "-o",
                     GetExecutablePath(dockerDirectory)
                 },
+                EnvironmentVariables = new List<string>{"GCC_COLORS="},
                 WorkingDirectory = workingDirectory
             };
         }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CodeAnalysis.Configuration;
 using CodeExecution.Contracts;
@@ -58,9 +60,29 @@ namespace CodeAnalysis.CodeAnalyzers.Base
             return executableCode.GetExecutionCommand(tempFolder,
                 _containerConfiguration.DockerWorkingDir);
         }
-
+        
         protected virtual Command ModifyCommandForAnalysis(Command executionCommand) => executionCommand;
 
         protected abstract CodeAnalysisResult AnalyseOutput(ContainerExecutionResult containerExecutionResult);
+
+        protected static CodeAnalysisResult GetCodeAnalysisResult(IEnumerable<AnalysisResult> errors, IEnumerable<AnalysisResult> warnings)
+        {
+            var errorsArray = errors as AnalysisResult[] ?? errors.ToArray();
+            
+            if (!errorsArray.Any())
+            {
+                return new CodeAnalysisResult
+                {
+                    IsSuccessful = true,
+                    AnalysisResults = warnings.ToArray()
+                };
+            }
+
+            return new CodeAnalysisResult
+            {
+                IsSuccessful = false,
+                AnalysisResults = errorsArray.Union(warnings).ToArray()
+            };
+        }
     }
 }
