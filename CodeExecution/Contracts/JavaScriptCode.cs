@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CodeExecution.Configuration;
 using DockerIntegration;
 
@@ -12,7 +13,8 @@ namespace CodeExecution.Contracts
                 Arguments = new[] {GetCodeFilePath()},
                 Limits = Limits,
                 MountDirectory = mountDirectory,
-                WorkingDirectory = ContainerConfiguration.DockerWorkingDir
+                WorkingDirectory = ContainerConfiguration.DockerWorkingDir,
+                EnvironmentVariables = new []{"NODE_DISABLE_COLORS=1"}
             };
 
         public JavaScriptCode(CodeExecutionConfiguration configuration, ContainerConfiguration containerConfiguration) :

@@ -18,6 +18,6 @@ namespace DockerIntegration
 
         public string WorkingDirectory { get; set; }
 
-        public IList<string> EnvironmentVariables { get; set; }
+        public string[] EnvironmentVariables { get; set; }
     }
 }

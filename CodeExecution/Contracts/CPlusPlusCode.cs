@@ -17,7 +17,7 @@ namespace CodeExecution.Contracts
                     "-o",
                     GetExecutablePath()
                 },
-                EnvironmentVariables = new List<string> {"GCC_COLORS="},
+                EnvironmentVariables = new [] {"GCC_COLORS="},
                 MountDirectory = mountDirectory,
                 WorkingDirectory = ContainerConfiguration.DockerWorkingDir
             };
