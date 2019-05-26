@@ -6,6 +6,8 @@ namespace CodeExecutionSystem.Client.Extensions
     public static class DependencyInjectionExtensions
     {
         public static IServiceCollection AddCodeExecutionSystem(this IServiceCollection serviceCollection) =>
-            serviceCollection.AddScoped<ICodeExecutionApi, ExecutionApiProxy>();
+            serviceCollection
+                .AddScoped<ICodeExecutionApi, ExecutionApiProxy>()
+                .AddScoped<ICodeAnalysisApi, AnalysisApiProxy>();
     }
 }

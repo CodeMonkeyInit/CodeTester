@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using CodeExecutionSystem.Contracts.Abstractions;
 using CodeExecutionSystem.Contracts.Data;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CodeExecutionSystem.Client
 {
-    public class ExecutionApiProxy : ICodeExecutionApi
+    public class ExecutionApiProxy : ApiProxy, ICodeExecutionApi
     {
         private readonly string _codeExecutionApiPath;
 
@@ -16,16 +15,12 @@ namespace CodeExecutionSystem.Client
 
         public ExecutionApiProxy(IConfiguration configuration)
         {
-            _codeExecutionApiPath = configuration[ApiPathKey]
-                                    ?? throw new ArgumentException(
-                                        $"ApiPathKey is not present in {nameof(IConfiguration)}");
+            _codeExecutionApiPath = GetKeyFromConfiguration(ApiPathKey, configuration);
         }
 
-        public async Task<CodeExecutionResult> ExecuteCodeAsync(TestingCode code)
-        {
-            Validator.ValidateObject(code, new ValidationContext(code));
+        
 
-            return await _codeExecutionApiPath.PostJsonAsync(code).ReceiveJson<CodeExecutionResult>();
-        }
+        public async Task<CodeExecutionResult> ExecuteCodeAsync(TestingCode code) => 
+            await PostToApi<CodeExecutionResult>(_codeExecutionApiPath, code);
     }
 }
