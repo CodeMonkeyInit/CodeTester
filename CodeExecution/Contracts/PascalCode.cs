@@ -15,7 +15,7 @@ namespace CodeExecution.Contracts
                 {
                     GetCodeFilePath(dockerDirectory)
                 },
-                WorkingDirectory = workingDirectory
+                MountDirectory = workingDirectory
             };
         }
 

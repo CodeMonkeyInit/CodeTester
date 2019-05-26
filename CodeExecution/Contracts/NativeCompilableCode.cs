@@ -20,7 +20,7 @@ namespace CodeExecution.Contracts
             {
                 Name = GetExecutablePath(dockerWorkingDirectory),
                 Limits = Limits,
-                WorkingDirectory = workingDirectory
+                MountDirectory = workingDirectory
             };
         }
     }

@@ -14,6 +14,8 @@ namespace DockerIntegration
 
         public Limits Limits { get; set; } = new Limits();
 
+        public string MountDirectory { get; set; }
+
         public string WorkingDirectory { get; set; }
 
         public IList<string> EnvironmentVariables { get; set; }

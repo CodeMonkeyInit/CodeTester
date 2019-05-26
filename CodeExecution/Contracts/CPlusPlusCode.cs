@@ -22,7 +22,7 @@ namespace CodeExecution.Contracts
                     GetExecutablePath(dockerDirectory)
                 },
                 EnvironmentVariables = new List<string>{"GCC_COLORS="},
-                WorkingDirectory = workingDirectory
+                MountDirectory = workingDirectory
             };
         }
     }

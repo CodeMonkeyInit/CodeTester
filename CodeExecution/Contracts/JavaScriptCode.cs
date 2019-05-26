@@ -15,7 +15,7 @@ namespace CodeExecution.Contracts
                 Name = "node",
                 Arguments = new[] {GetCodeFilePath(dockerWorkingDirectory)},
                 Limits = Limits,
-                WorkingDirectory = workingDirectory
+                MountDirectory = workingDirectory
             };
     }
 }

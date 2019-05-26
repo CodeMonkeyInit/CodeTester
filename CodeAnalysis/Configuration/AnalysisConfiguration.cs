@@ -5,5 +5,7 @@ namespace CodeAnalysis.Configuration
         public string TempFolderPath { get; set; }
 
         public string FileName { get; set; } = "code";
+        
+        public string EsLintFolder { get; set; }
     }
 }

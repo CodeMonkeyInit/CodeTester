@@ -14,7 +14,7 @@ namespace CodeExecution.Contracts
             {
                 Name = "php",
                 Arguments = new[] {GetCodeFilePath(dockerWorkingDirectory)},
-                WorkingDirectory = workingDirectory,
+                MountDirectory = workingDirectory,
                 Limits = Limits
             };
     }

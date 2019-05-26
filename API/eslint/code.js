@@ -1,0 +1,1 @@
+program Hello; var a : Integer; begin writeln (1/0); end.

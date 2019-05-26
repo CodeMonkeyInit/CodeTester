@@ -10,11 +10,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CodeAnalysisApi : ControllerBase, ICodeAnalysisApi
+    public class CodeAnalysisController : ControllerBase, ICodeAnalysisApi
     {
         private readonly CodeAnalyzerFactory _codeAnalyzerFactory;
 
-        public CodeAnalysisApi(CodeAnalyzerFactory codeAnalyzerFactory)
+        public CodeAnalysisController(CodeAnalyzerFactory codeAnalyzerFactory)
         {
             _codeAnalyzerFactory = codeAnalyzerFactory;
         }

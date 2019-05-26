@@ -14,8 +14,9 @@ namespace CodeAnalysis.CodeAnalyzers.Base
     public abstract class CodeAnalyzer
     {
         protected readonly AnalysisConfiguration Configuration;
+        protected readonly ContainerConfiguration ContainerConfiguration;
+        
         private readonly ExecutableCodeFactory _codeFactory;
-        private readonly ContainerConfiguration _containerConfiguration;
         private readonly DockerContainerExecutor _executor;
 
         public CodeAnalyzer(AnalysisConfiguration configuration, ExecutableCodeFactory codeFactory,
@@ -23,7 +24,7 @@ namespace CodeAnalysis.CodeAnalyzers.Base
         {
             Configuration = configuration;
             _codeFactory = codeFactory;
-            _containerConfiguration = containerConfiguration;
+            ContainerConfiguration = containerConfiguration;
             _executor = executor;
         }
 
@@ -31,10 +32,7 @@ namespace CodeAnalysis.CodeAnalyzers.Base
         {
             var tempFolder = Path.Combine(Configuration.TempFolderPath, Guid.NewGuid().ToString());
             
-            Directory.CreateDirectory(tempFolder);
-            
-            await File.WriteAllTextAsync(
-                Path.Combine(tempFolder, Configuration.FileName + code.Language.GetExtension()), code.Text);
+            await CreateDirectoryForAnalysis(code, tempFolder);
 
             ExecutableCode executableCode = _codeFactory.GetExecutableCode(code);
 
@@ -44,21 +42,37 @@ namespace CodeAnalysis.CodeAnalyzers.Base
 
             ContainerExecutionResult containerExecutionResult = await _executor.ExecuteAsync(analysisCommand);
 
-            CodeAnalysisResult codeAnalysis = AnalyseOutput(containerExecutionResult);
-
+            if (containerExecutionResult.Result == ExecutionResult.Success)
+            {
+                CodeAnalysisResult codeAnalysis = AnalyseOutput(containerExecutionResult);
+                
+                return codeAnalysis;
+            }
+            
             Directory.Delete(tempFolder, true);
 
-            return codeAnalysis;
+            return new CodeAnalysisResult
+            {
+                IsSuccessful = false
+            };
+        }
+
+        protected virtual async Task CreateDirectoryForAnalysis(TestingCode code, string tempFolder)
+        {
+            Directory.CreateDirectory(tempFolder);
+
+            await File.WriteAllTextAsync(
+                Path.Combine(tempFolder, Configuration.FileName + code.Language.GetExtension()), code.Text);
         }
 
         private Command GetCompilationCommand(ExecutableCode executableCode, string tempFolder)
         {
             if (executableCode is CompilableCode compilableCode)
             {
-                return compilableCode.GetCompilationCommand(tempFolder, _containerConfiguration.DockerWorkingDir);
+                return compilableCode.GetCompilationCommand(tempFolder, ContainerConfiguration.DockerWorkingDir);
             }
             return executableCode.GetExecutionCommand(tempFolder,
-                _containerConfiguration.DockerWorkingDir);
+                ContainerConfiguration.DockerWorkingDir);
         }
         
         protected virtual Command ModifyCommandForAnalysis(Command executionCommand) => executionCommand;

@@ -8,6 +8,7 @@ using CodeExecution.Contracts;
 using CodeExecution.Extension;
 using CodeExecutionSystem.Contracts.Data;
 using DockerIntegration;
+using Helpers;
 
 namespace CodeExecution
 {
@@ -59,7 +60,7 @@ namespace CodeExecution
         {
             var binariesFolder = Path.Combine(environmentPath, "bin");
 
-            Copy(environmentPath, binariesFolder);
+            environmentPath.CopyFolderTo(binariesFolder);
 
             var codeExecutionResultsTasks =
                 testingCode.ExecutionData.Select(executionData =>
@@ -76,7 +77,7 @@ namespace CodeExecution
         {
             var testRunEnvironment = Path.Combine(environmentPath, Guid.NewGuid().ToString());
 
-            Copy(binariesFolder, testRunEnvironment);
+            binariesFolder.CopyFolderTo(testRunEnvironment);
 
             var containerExecutionResult =
                 await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment, _containerConfiguration.DockerWorkingDir));
@@ -113,29 +114,6 @@ namespace CodeExecution
             return executingCodeFolder;
         }
 
-        public static void Copy(string sourceDirectory, string targetDirectory)
-        {
-            var diSource = new DirectoryInfo(sourceDirectory);
-            var diTarget = new DirectoryInfo(targetDirectory);
-
-            CopyAll(diSource, diTarget);
-        }
-
-        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
-        {
-            Directory.CreateDirectory(target.FullName);
-
-            // Copy each file into the new directory.
-            foreach (var fi in source.GetFiles()) fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
-
-            // Copy each subdirectory using recursion.
-            foreach (var diSourceSubDir in source.GetDirectories())
-                if (diSourceSubDir.FullName != target.FullName)
-                {
-                    var nextTargetSubDir =
-                        target.CreateSubdirectory(diSourceSubDir.Name);
-                    CopyAll(diSourceSubDir, nextTargetSubDir);
-                }
-        }
+        
     }
 }
