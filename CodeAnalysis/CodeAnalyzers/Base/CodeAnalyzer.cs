@@ -15,7 +15,7 @@ namespace CodeAnalysis.CodeAnalyzers.Base
     {
         protected readonly AnalysisConfiguration Configuration;
         protected readonly ContainerConfiguration ContainerConfiguration;
-        
+
         private readonly ExecutableCodeFactory _codeFactory;
         private readonly DockerContainerExecutor _executor;
 
@@ -31,7 +31,7 @@ namespace CodeAnalysis.CodeAnalyzers.Base
         public async Task<CodeAnalysisResult> Analyse(TestingCode code)
         {
             var tempFolder = Path.Combine(Configuration.TempFolderPath, Guid.NewGuid().ToString());
-            
+
             await CreateDirectoryForAnalysis(code, tempFolder);
 
             ExecutableCode executableCode = _codeFactory.GetExecutableCode(code);
@@ -45,10 +45,10 @@ namespace CodeAnalysis.CodeAnalyzers.Base
             if (containerExecutionResult.Result == ExecutionResult.Success)
             {
                 CodeAnalysisResult codeAnalysis = AnalyseOutput(containerExecutionResult);
-                
+
                 return codeAnalysis;
             }
-            
+
             Directory.Delete(tempFolder, true);
 
             return new CodeAnalysisResult
@@ -69,20 +69,21 @@ namespace CodeAnalysis.CodeAnalyzers.Base
         {
             if (executableCode is CompilableCode compilableCode)
             {
-                return compilableCode.GetCompilationCommand(tempFolder, ContainerConfiguration.DockerWorkingDir);
+                return compilableCode.GetCompilationCommand(tempFolder);
             }
-            return executableCode.GetExecutionCommand(tempFolder,
-                ContainerConfiguration.DockerWorkingDir);
+
+            return executableCode.GetExecutionCommand(tempFolder);
         }
-        
+
         protected virtual Command ModifyCommandForAnalysis(Command executionCommand) => executionCommand;
 
         protected abstract CodeAnalysisResult AnalyseOutput(ContainerExecutionResult containerExecutionResult);
 
-        protected static CodeAnalysisResult GetCodeAnalysisResult(IEnumerable<AnalysisResult> errors, IEnumerable<AnalysisResult> warnings)
+        protected static CodeAnalysisResult GetCodeAnalysisResult(IEnumerable<AnalysisResult> errors,
+            IEnumerable<AnalysisResult> warnings)
         {
             var errorsArray = errors as AnalysisResult[] ?? errors.ToArray();
-            
+
             if (!errorsArray.Any())
             {
                 return new CodeAnalysisResult

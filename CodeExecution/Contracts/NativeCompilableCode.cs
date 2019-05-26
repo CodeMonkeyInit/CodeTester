@@ -5,23 +5,25 @@ namespace CodeExecution.Contracts
 {
     public abstract class NativeCompilableCode : CompilableCode
     {
-        protected NativeCompilableCode(CodeExecutionConfiguration configuration) : base(configuration)
+        public override string GetExecutable()
         {
+            return GetExecutablePath();
         }
 
-        public override string GetExecutable(string workingDirectory)
-        {
-            return GetExecutablePath(workingDirectory);
-        }
-
-        public override Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory)
+        public override Command GetExecutionCommand(string mountDirectory)
         {
             return new Command
             {
-                Name = GetExecutablePath(dockerWorkingDirectory),
+                Name = $"./{GetExecutablePath()}",
                 Limits = Limits,
-                MountDirectory = workingDirectory
+                MountDirectory = mountDirectory,
+                WorkingDirectory = ContainerConfiguration.DockerWorkingDir
             };
+        }
+
+        protected NativeCompilableCode(CodeExecutionConfiguration configuration,
+            ContainerConfiguration containerConfiguration) : base(configuration, containerConfiguration)
+        {
         }
     }
 }

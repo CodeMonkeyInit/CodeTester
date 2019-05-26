@@ -16,19 +16,20 @@ namespace CodeExecution.Compilaton
         private readonly DockerContainerExecutor _executor;
 
         public CodeCompiler(CodeExecutionConfiguration configuration, ContainerConfiguration containerConfiguration,
-         DockerContainerExecutor executor)
+            DockerContainerExecutor executor)
         {
             _configuration = configuration;
             _containerConfiguration = containerConfiguration;
             _executor = executor;
         }
+
         public async Task<CompilationResult> CompileCodeAsync(CompilableCode code)
         {
             var codeFilename = _configuration.CodeName + code.Language.GetExtension();
 
             var pathToCode = Path.Combine(code.WorkingDirectory, codeFilename);
-            
-            var compilationCommand = code.GetCompilationCommand(code.WorkingDirectory, _containerConfiguration.DockerWorkingDir);
+
+            var compilationCommand = code.GetCompilationCommand(code.WorkingDirectory);
 
             var execute = await _executor.ExecuteAsync(compilationCommand);
 
@@ -37,13 +38,13 @@ namespace CodeExecution.Compilaton
                 return new CompilationResult
                 {
                     OutputPath = pathToCode,
-                    ExecutablePath = code.GetExecutable(pathToCode)
+                    ExecutablePath = code.GetExecutable()
                 };
             }
-            
+
             return new CompilationResult
             {
-                Errors =  execute.ErrorOutput.Split(Environment.NewLine)
+                Errors = execute.ErrorOutput.Split(Environment.NewLine)
                     .Union(execute.StandardOutput.Split(Environment.NewLine))
                     .ToArray()
             };

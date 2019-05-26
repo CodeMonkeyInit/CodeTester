@@ -5,17 +5,19 @@ namespace CodeExecution.Contracts
 {
     public class PhpCode : ExecutableCode
     {
-        public PhpCode(CodeExecutionConfiguration configuration) : base(configuration)
-        {
-        }
-
-        public override Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory) =>
+        public override Command GetExecutionCommand(string mountDirectory) =>
             new Command
             {
                 Name = "php",
-                Arguments = new[] {GetCodeFilePath(dockerWorkingDirectory)},
-                MountDirectory = workingDirectory,
-                Limits = Limits
+                Arguments = new[] {GetCodeFilePath()},
+                MountDirectory = mountDirectory,
+                Limits = Limits,
+                WorkingDirectory = ContainerConfiguration.DockerWorkingDir
             };
+
+        public PhpCode(CodeExecutionConfiguration configuration, ContainerConfiguration containerConfiguration) : base(
+            configuration, containerConfiguration)
+        {
+        }
     }
 }

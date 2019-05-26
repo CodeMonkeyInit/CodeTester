@@ -1,4 +1,3 @@
-using System;
 using CodeExecution.Configuration;
 using DockerIntegration;
 
@@ -6,21 +5,23 @@ namespace CodeExecution.Contracts
 {
     public class PascalCode : NativeCompilableCode
     {
-        public override Command GetCompilationCommand(string workingDirectory, string dockerDirectory)
+        public override Command GetCompilationCommand(string mountDirectory)
         {
             return new Command
             {
                 Name = "fpc",
                 Arguments = new[]
                 {
-                    GetCodeFilePath(dockerDirectory)
+                    GetCodeFilePath()
                 },
-                MountDirectory = workingDirectory
+                MountDirectory = mountDirectory,
+                WorkingDirectory = ContainerConfiguration.DockerWorkingDir
             };
         }
 
 
-        public PascalCode(CodeExecutionConfiguration configuration) : base(configuration)
+        public PascalCode(CodeExecutionConfiguration configuration, ContainerConfiguration containerConfiguration) :
+            base(configuration, containerConfiguration)
         {
         }
     }

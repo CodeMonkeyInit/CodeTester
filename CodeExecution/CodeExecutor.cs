@@ -80,7 +80,7 @@ namespace CodeExecution
             binariesFolder.CopyFolderTo(testRunEnvironment);
 
             var containerExecutionResult =
-                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment, _containerConfiguration.DockerWorkingDir));
+                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment));
 
             var outputFile = Path.Combine(testRunEnvironment, "output.txt");
             return new TestRunResult
@@ -113,7 +113,5 @@ namespace CodeExecution
             await File.WriteAllTextAsync(codePath, testingCode.Text);
             return executingCodeFolder;
         }
-
-        
     }
 }

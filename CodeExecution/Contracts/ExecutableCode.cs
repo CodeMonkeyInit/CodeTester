@@ -1,4 +1,3 @@
-using System.IO;
 using CodeExecution.Configuration;
 using CodeExecution.Extension;
 using CodeExecutionSystem.Contracts.Data;
@@ -8,25 +7,27 @@ namespace CodeExecution.Contracts
 {
     public abstract class ExecutableCode : TestingCode
     {
-        protected CodeExecutionConfiguration Configuration;
+        protected ContainerConfiguration ContainerConfiguration { get; }
+        protected readonly CodeExecutionConfiguration Configuration;
 
-        public ExecutableCode(CodeExecutionConfiguration configuration)
+        public ExecutableCode(CodeExecutionConfiguration configuration, ContainerConfiguration containerConfiguration)
         {
+            ContainerConfiguration = containerConfiguration;
             Configuration = configuration;
         }
 
         public string WorkingDirectory { get; set; } = string.Empty;
 
-        public abstract Command GetExecutionCommand(string workingDirectory, string dockerWorkingDirectory);
+        public abstract Command GetExecutionCommand(string mountDirectory);
 
-        protected string GetExecutablePath(string workingDirectory)
+        protected string GetExecutablePath()
         {
-            return Path.Combine(workingDirectory, Configuration.CodeName);
+            return Configuration.CodeName;
         }
 
-        protected string GetCodeFilePath(string workingDirectory)
+        protected string GetCodeFilePath()
         {
-            return GetExecutablePath(workingDirectory) + Language.GetExtension();
+            return GetExecutablePath() + Language.GetExtension();
         }
     }
 }

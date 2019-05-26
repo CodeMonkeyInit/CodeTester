@@ -1,3 +1,5 @@
+using System;
+
 namespace CodeExecutionSystem.Contracts.Data
 {
     public class TestRunResult
@@ -5,9 +7,11 @@ namespace CodeExecutionSystem.Contracts.Data
         public ExecutionResult ExecutionResult { get; set; }
 
         public string UserOutput { get; set; }
-        
+
         public string ExpectedOutput { get; set; }
 
-        public bool WasSuccessfull => UserOutput == ExpectedOutput;
+        public bool WasSuccessfull => ExecutionResult == ExecutionResult.Success && UserOutput
+                                          .Trim()
+                                          .Equals(ExpectedOutput.Trim(), StringComparison.InvariantCulture);
     }
 }
