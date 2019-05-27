@@ -1,7 +1,6 @@
 using CodeExecution.Compilaton;
 using CodeExecution.Configuration;
 using CodeExecution.Contracts;
-using DockerIntegration.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

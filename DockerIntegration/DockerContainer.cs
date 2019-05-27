@@ -37,7 +37,7 @@ namespace DockerIntegration
                 WorkingDir = command.WorkingDirectory,
                 HostConfig = new HostConfig
                 {
-                    Memory = command.Limits.MemoryLimitInBytes,
+                    Memory = command.Limits.MemoryLimitInBytes
                 }
             };
 

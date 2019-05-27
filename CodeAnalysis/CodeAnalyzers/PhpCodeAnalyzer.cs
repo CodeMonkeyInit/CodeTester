@@ -11,8 +11,8 @@ namespace CodeAnalysis.CodeAnalyzers
 {
     public class PhpCodeAnalyzer : CodeAnalyzer
     {
-        private readonly string PhpError = "PHP Parse error:";
-        
+        private const string PhpError = "PHP Parse error:";
+
         protected override Command ModifyCommandForAnalysis(Command executionCommand)
         {
             executionCommand.Arguments = executionCommand.Arguments.Prepend("-l").ToArray();
