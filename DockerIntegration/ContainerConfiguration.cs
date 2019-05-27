@@ -6,6 +6,8 @@ namespace DockerIntegration
 
         public long TimeBetweenContainerStatusChecksInMs { get; set; } = 100;
 
+        public int MaximumContainers { get; set; } = 10;
+
         public string DockerWorkingDir { get; set; } = "/mnt/docker";
 
         public string DockerEngineUri { get; set; } = "unix:///var/run/docker.sock";

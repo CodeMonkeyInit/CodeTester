@@ -13,7 +13,7 @@ namespace DockerIntegration.Extensions
         {
             return serviceCollection
                 .Configure<ContainerConfiguration>(configuration.GetSection(nameof(ContainerConfiguration)))
-                .AddScoped(container => container.GetRequiredService<IOptionsSnapshot<ContainerConfiguration>>().Value)
+                .AddSingleton(container => container.GetRequiredService<IOptions<ContainerConfiguration>>().Value)
                 .AddSingleton(collection => new DockerClientConfiguration(dockerUri))
                 .AddTransient(collection => collection.GetRequiredService<DockerClientConfiguration>().CreateClient())
                 .AddTransient<DockerContainer>()
