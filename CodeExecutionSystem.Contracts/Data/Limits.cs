@@ -7,7 +7,7 @@ namespace CodeExecutionSystem.Contracts.Data
 {
     public class Limits
     {
-        private const int DockerMinimumMemoryLimitInBytes = 5_000_000;
+        private const int DockerMinimumMemoryLimitInBytes = 4_194_304;
 
         public long TimeLimitInMs { get; set; } = TimeSpan.FromMinutes(1).TotalMilliseconds.ToLong();
 

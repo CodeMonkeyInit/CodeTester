@@ -10,7 +10,7 @@ namespace CodeExecutionSystem.Contracts.Data
 
         public string ExpectedOutput { get; set; }
 
-        public bool WasSuccessfull => ExecutionResult == ExecutionResult.Success && UserOutput
+        public bool WasSuccessful => ExecutionResult == ExecutionResult.Success && UserOutput
                                           .Trim()
                                           .Equals(ExpectedOutput.Trim(), StringComparison.InvariantCulture);
     }
