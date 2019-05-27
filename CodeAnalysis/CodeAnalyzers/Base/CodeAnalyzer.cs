@@ -42,19 +42,16 @@ namespace CodeAnalysis.CodeAnalyzers.Base
 
             ContainerExecutionResult containerExecutionResult = await _executor.ExecuteAsync(analysisCommand);
 
+            CodeAnalysisResult codeAnalysis = new CodeAnalysisResult();
+            
             if (containerExecutionResult.Result == ExecutionResult.Success)
             {
-                CodeAnalysisResult codeAnalysis = AnalyseOutput(containerExecutionResult);
-
-                return codeAnalysis;
+                codeAnalysis = AnalyseOutput(containerExecutionResult);
             }
 
             Directory.Delete(tempFolder, true);
 
-            return new CodeAnalysisResult
-            {
-                IsSuccessful = false
-            };
+            return codeAnalysis;
         }
 
         protected virtual async Task CreateDirectoryForAnalysis(TestingCode code, string tempFolder)
