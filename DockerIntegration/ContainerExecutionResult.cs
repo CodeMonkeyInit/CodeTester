@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using CodeExecutionSystem.Contracts.Data;
 
 namespace DockerIntegration
@@ -17,5 +19,10 @@ namespace DockerIntegration
         public static ContainerExecutionResult KilledByMemoryLimit => new ContainerExecutionResult {Result = ExecutionResult.KilledByMemoryLimit};
 
         public bool WasSuccessful => ExitCode == 0 && Result == ExecutionResult.Success && string.IsNullOrWhiteSpace(ErrorOutput);
+
+        public string[] StandardOutputSplit =>
+            StandardOutput.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                .Select(output => output.Trim())
+                .ToArray();
     }
 }

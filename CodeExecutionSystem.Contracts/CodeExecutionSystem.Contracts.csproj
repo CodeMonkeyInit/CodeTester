@@ -3,11 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <PackageId>CodeExecutionSystem.Contracts</PackageId>
-        <Version>0.0.7.1</Version>
+        <Version>0.0.8.1</Version>
         <Authors>CodeMonkeyJr</Authors>
         <Company>ShitCode ©</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,12 +16,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Helpers\Helpers.csproj" PrivateAssets="All"/>
+        <ProjectReference Include="..\Helpers\Helpers.csproj" PrivateAssets="All" />
     </ItemGroup>
 
     <Target Name="IncludeP2PAssets">
         <ItemGroup>
-            <BuildOutputInPackage Include="$(OutputPath)\Helpers.dll"/>
+            <BuildOutputInPackage Include="$(OutputPath)Helpers.dll" />
         </ItemGroup>
     </Target>
 

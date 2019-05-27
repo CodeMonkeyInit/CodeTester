@@ -11,15 +11,24 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj" />
       <ProjectReference Include="..\CodeExecution\CodeExecution.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="eslint\**" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+    
     <ItemGroup>
         <Content Update="appsettings.json">
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Update="appsettings.Development.json">
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="eslint\package.json">
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

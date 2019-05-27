@@ -8,6 +8,7 @@
       <ProjectReference Include="..\CodeExecutionSystem.Contracts\CodeExecutionSystem.Contracts.csproj" />
       <ProjectReference Include="..\CodeExecution\CodeExecution.csproj" />
       <ProjectReference Include="..\DockerIntegration\DockerIntegration.csproj" />
+      <ProjectReference Include="..\Helpers\Helpers.csproj" />
     </ItemGroup>
 
 </Project>

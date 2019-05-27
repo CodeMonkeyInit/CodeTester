@@ -1,17 +1,17 @@
-using System.IO;
 using CodeExecution.Configuration;
-using CodeExecution.Extension;
 using DockerIntegration;
 
 namespace CodeExecution.Contracts
 {
     public abstract class CompilableCode : ExecutableCode
     {
-        public abstract Command GetCompilationCommand(string workingDirectory, string dockerDirectory);
+        public abstract Command GetCompilationCommand(string mountDirectory);
 
-        public abstract string GetExecutable(string workingDirectory);
+        public abstract string GetExecutable();
 
-        public CompilableCode(CodeExecutionConfiguration configuration): base(configuration)
+
+        protected CompilableCode(CodeExecutionConfiguration configuration,
+            ContainerConfiguration containerConfiguration) : base(configuration, containerConfiguration)
         {
         }
     }

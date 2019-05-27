@@ -1,4 +1,3 @@
-using System;
 using CodeExecution.Compilaton;
 using CodeExecution.Configuration;
 using CodeExecution.Contracts;
@@ -11,7 +10,7 @@ namespace CodeExecution.Extension
 {
     public static class DependencyInjectionExtensions
     {
-        public static IServiceCollection AddCodeExecution(this IServiceCollection serviceCollection, Uri dockerUri,
+        public static IServiceCollection AddCodeExecution(this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
             return serviceCollection
@@ -19,7 +18,6 @@ namespace CodeExecution.Extension
                 .AddScoped(container => container
                     .GetService<IOptionsSnapshot<CodeExecutionConfiguration>>().Value)
                 .AddScoped<ExecutableCodeFactory>()
-                .AddDocker(dockerUri, configuration)
                 .AddScoped<CodeCompiler>()
                 .AddScoped<CodeExecutor>()
                 .AddTransient<PhpCode>()

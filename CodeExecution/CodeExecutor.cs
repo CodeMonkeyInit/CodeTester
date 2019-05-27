@@ -8,6 +8,7 @@ using CodeExecution.Contracts;
 using CodeExecution.Extension;
 using CodeExecutionSystem.Contracts.Data;
 using DockerIntegration;
+using Helpers;
 
 namespace CodeExecution
 {
@@ -16,15 +17,15 @@ namespace CodeExecution
         private readonly CodeCompiler _compiler;
         private readonly CodeExecutionConfiguration _configuration;
 
-        private readonly ContainerConfiguration _containerConfiguration;
         private readonly DockerContainerExecutor _executor;
 
-        public CodeExecutor(CodeExecutionConfiguration configuration, CodeCompiler compiler,
-            DockerContainerExecutor executor, ContainerConfiguration containerConfiguration)
+        public CodeExecutor(
+            CodeExecutionConfiguration configuration, 
+            CodeCompiler compiler,
+            DockerContainerExecutor executor)
         {
             _configuration = configuration;
             _compiler = compiler;
-            _containerConfiguration = containerConfiguration;
             _executor = executor;
         }
 
@@ -59,8 +60,8 @@ namespace CodeExecution
         {
             var binariesFolder = Path.Combine(environmentPath, "bin");
 
-            Copy(environmentPath, binariesFolder);
-
+            environmentPath.CopyFolderTo(binariesFolder);
+            
             var codeExecutionResultsTasks =
                 testingCode.ExecutionData.Select(executionData =>
                     RunAsync(executionData, environmentPath, binariesFolder, testingCode));
@@ -76,12 +77,20 @@ namespace CodeExecution
         {
             var testRunEnvironment = Path.Combine(environmentPath, Guid.NewGuid().ToString());
 
-            Copy(binariesFolder, testRunEnvironment);
+            binariesFolder.CopyFolderTo(testRunEnvironment);
 
+            string inputFilePath = Path.Combine(testRunEnvironment, _configuration.InputFileName);
+            
+            File.WriteAllText(inputFilePath, executionData.InputData);
+
+            var executionCommand = testingCode.GetExecutionCommand(testRunEnvironment);
+
+            executionCommand.StdinFilename = _configuration.InputFileName;
+            
             var containerExecutionResult =
-                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment, _containerConfiguration.DockerWorkingDir));
+                await _executor.ExecuteAsync(executionCommand);
 
-            var outputFile = Path.Combine(testRunEnvironment, "output.txt");
+            var outputFile = Path.Combine(testRunEnvironment, _configuration.OutputFileName);
             return new TestRunResult
             {
                 ExecutionResult = containerExecutionResult.Result,
@@ -90,13 +99,10 @@ namespace CodeExecution
             };
         }
 
-        private static async Task<string> GetUserOutput(string outputFile,
-            ContainerExecutionResult containerExecutionResult)
-        {
-            return File.Exists(outputFile)
+        private static async Task<string> GetUserOutput(string outputFile, ContainerExecutionResult containerExecutionResult) =>
+            File.Exists(outputFile)
                 ? await File.ReadAllTextAsync(outputFile)
                 : containerExecutionResult.StandardOutput;
-        }
 
         private async Task<string> CreateEnvironment(ExecutableCode testingCode)
         {
@@ -111,31 +117,6 @@ namespace CodeExecution
 
             await File.WriteAllTextAsync(codePath, testingCode.Text);
             return executingCodeFolder;
-        }
-
-        public static void Copy(string sourceDirectory, string targetDirectory)
-        {
-            var diSource = new DirectoryInfo(sourceDirectory);
-            var diTarget = new DirectoryInfo(targetDirectory);
-
-            CopyAll(diSource, diTarget);
-        }
-
-        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
-        {
-            Directory.CreateDirectory(target.FullName);
-
-            // Copy each file into the new directory.
-            foreach (var fi in source.GetFiles()) fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
-
-            // Copy each subdirectory using recursion.
-            foreach (var diSourceSubDir in source.GetDirectories())
-                if (diSourceSubDir.FullName != target.FullName)
-                {
-                    var nextTargetSubDir =
-                        target.CreateSubdirectory(diSourceSubDir.Name);
-                    CopyAll(diSourceSubDir, nextTargetSubDir);
-                }
         }
     }
 }

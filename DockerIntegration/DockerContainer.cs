@@ -33,20 +33,22 @@ namespace DockerIntegration
                 Tty = true,
                 AttachStdin = true,
                 Cmd = command.ProgramNameWithArguments,
+                Env = command.EnvironmentVariables,
+                WorkingDir = command.WorkingDirectory,
                 HostConfig = new HostConfig
                 {
                     Memory = command.Limits.MemoryLimitInBytes,
                 }
             };
 
-            if (!string.IsNullOrWhiteSpace(command.WorkingDirectory))
+            if (!string.IsNullOrWhiteSpace(command.MountDirectory))
             {
                 createContainerParameters.HostConfig.Mounts = new List<Mount>
                 {
                     new Mount
                     {
                         Type = "bind",
-                        Source = command.WorkingDirectory,
+                        Source = command.MountDirectory,
                         Target = _configuration.DockerWorkingDir
                     }
                 };
