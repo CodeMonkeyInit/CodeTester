@@ -17,15 +17,15 @@ namespace CodeExecution
         private readonly CodeCompiler _compiler;
         private readonly CodeExecutionConfiguration _configuration;
 
-        private readonly ContainerConfiguration _containerConfiguration;
         private readonly DockerContainerExecutor _executor;
 
-        public CodeExecutor(CodeExecutionConfiguration configuration, CodeCompiler compiler,
-            DockerContainerExecutor executor, ContainerConfiguration containerConfiguration)
+        public CodeExecutor(
+            CodeExecutionConfiguration configuration, 
+            CodeCompiler compiler,
+            DockerContainerExecutor executor)
         {
             _configuration = configuration;
             _compiler = compiler;
-            _containerConfiguration = containerConfiguration;
             _executor = executor;
         }
 
@@ -61,7 +61,7 @@ namespace CodeExecution
             var binariesFolder = Path.Combine(environmentPath, "bin");
 
             environmentPath.CopyFolderTo(binariesFolder);
-
+            
             var codeExecutionResultsTasks =
                 testingCode.ExecutionData.Select(executionData =>
                     RunAsync(executionData, environmentPath, binariesFolder, testingCode));
@@ -79,10 +79,18 @@ namespace CodeExecution
 
             binariesFolder.CopyFolderTo(testRunEnvironment);
 
-            var containerExecutionResult =
-                await _executor.ExecuteAsync(testingCode.GetExecutionCommand(testRunEnvironment));
+            string inputFilePath = Path.Combine(testRunEnvironment, _configuration.InputFileName);
+            
+            File.WriteAllText(inputFilePath, executionData.InputData);
 
-            var outputFile = Path.Combine(testRunEnvironment, "output.txt");
+            var executionCommand = testingCode.GetExecutionCommand(testRunEnvironment);
+
+            executionCommand.StdinFilename = _configuration.InputFileName;
+            
+            var containerExecutionResult =
+                await _executor.ExecuteAsync(executionCommand);
+
+            var outputFile = Path.Combine(testRunEnvironment, _configuration.OutputFileName);
             return new TestRunResult
             {
                 ExecutionResult = containerExecutionResult.Result,
@@ -91,13 +99,10 @@ namespace CodeExecution
             };
         }
 
-        private static async Task<string> GetUserOutput(string outputFile,
-            ContainerExecutionResult containerExecutionResult)
-        {
-            return File.Exists(outputFile)
+        private static async Task<string> GetUserOutput(string outputFile, ContainerExecutionResult containerExecutionResult) =>
+            File.Exists(outputFile)
                 ? await File.ReadAllTextAsync(outputFile)
                 : containerExecutionResult.StandardOutput;
-        }
 
         private async Task<string> CreateEnvironment(ExecutableCode testingCode)
         {
