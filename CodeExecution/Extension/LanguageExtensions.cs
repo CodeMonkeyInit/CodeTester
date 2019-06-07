@@ -1,5 +1,4 @@
 using System;
-using CodeExecutionSystem.Contracts;
 using CodeExecutionSystem.Contracts.Data;
 
 namespace CodeExecution.Extension
@@ -34,7 +33,7 @@ namespace CodeExecution.Extension
                 case Language.Pascal:
                 case Language.CPlusPlus:
                     return true;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(language), language, null);
             }

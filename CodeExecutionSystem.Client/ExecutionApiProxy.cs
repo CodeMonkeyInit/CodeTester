@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CodeExecutionSystem.Contracts.Abstractions;
 using CodeExecutionSystem.Contracts.Data;
-using Flurl.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace CodeExecutionSystem.Client
