@@ -16,7 +16,7 @@ namespace CodeExecution.Contracts
                     GetCodeFilePath(),
                     "-o",
                     GetExecutablePath(),
-                    "-std=gnu++17"
+                    "-std=c++17"
                 },
                 EnvironmentVariables = new [] {"GCC_COLORS="},
                 MountDirectory = mountDirectory,
