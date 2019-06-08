@@ -25,7 +25,10 @@ namespace CodeAnalysis.CodeAnalyzers
 
         protected override Command ModifyCommandForAnalysis(Command executionCommand)
         {
-            executionCommand.Arguments = new[] {"-c", executionCommand.Arguments.First()};
+            var filename = executionCommand.Arguments.First();
+            var latestStandardFlag = executionCommand.Arguments.Last();
+            
+            executionCommand.Arguments = new[] {"-c", filename, latestStandardFlag};
 
             return executionCommand;
         }
