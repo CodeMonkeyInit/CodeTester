@@ -115,12 +115,6 @@ namespace DockerIntegration
             return true;
         }
 
-        public async Task<IList<ContainerListResponse>> GetContainersAsync()
-        {
-            var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters());
-            return containers;
-        }
-
         public async Task<string> GetContainerLogsAsync(ContainerLogsParameters logsParameters)
         {
             var stream = await _client.Containers.GetContainerLogsAsync(_createContainerResponse.ID, logsParameters);

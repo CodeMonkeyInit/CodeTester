@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj" />
+      <ProjectReference Include="..\CodeExecutionSystem.Contracts\CodeExecutionSystem.Contracts.csproj" />
+      <ProjectReference Include="..\CodeExecution\CodeExecution.csproj" />
+    </ItemGroup>
+
+</Project>

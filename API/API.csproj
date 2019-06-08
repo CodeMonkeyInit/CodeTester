@@ -13,6 +13,7 @@
     <ItemGroup>
         <ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj" />
       <ProjectReference Include="..\CodeExecution\CodeExecution.csproj" />
+      <ProjectReference Include="..\CodeQuality\CodeQuality.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,6 +31,10 @@
         </Content>
         <Content Update="eslint\package.json">
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+
+        <Content Update="wwwroot\codeQualityTester.html">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
