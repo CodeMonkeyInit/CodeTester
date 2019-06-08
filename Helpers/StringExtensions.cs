@@ -14,15 +14,5 @@ namespace Helpers
                 default: return input.First().ToString().ToUpper() + input.Substring(1);
             }
         }
-
-        public static string EndWithNewLine(this string text)
-        {
-            if (!text.EndsWith(Environment.NewLine))
-            {
-                return text + Environment.NewLine;
-            }
-
-            return text;
-        }
     }
 }

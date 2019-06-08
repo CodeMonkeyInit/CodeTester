@@ -81,7 +81,7 @@ namespace CodeExecution
 
             string inputFilePath = Path.Combine(testRunEnvironment, _configuration.InputFileName);
             
-            File.WriteAllText(inputFilePath, executionData.InputData.EndWithNewLine());
+            File.WriteAllText(inputFilePath, executionData.InputData);
 
             var executionCommand = testingCode.GetExecutionCommand(testRunEnvironment);
 
