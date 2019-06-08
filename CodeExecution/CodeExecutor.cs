@@ -76,12 +76,12 @@ namespace CodeExecution
             string binariesFolder, ExecutableCode testingCode)
         {
             var testRunEnvironment = Path.Combine(environmentPath, Guid.NewGuid().ToString());
-
+            
             binariesFolder.CopyFolderTo(testRunEnvironment);
 
             string inputFilePath = Path.Combine(testRunEnvironment, _configuration.InputFileName);
             
-            File.WriteAllText(inputFilePath, executionData.InputData);
+            File.WriteAllText(inputFilePath, executionData.InputData.EndWithNewLine());
 
             var executionCommand = testingCode.GetExecutionCommand(testRunEnvironment);
 
