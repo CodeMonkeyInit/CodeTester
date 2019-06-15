@@ -158,7 +158,6 @@ describe("Code analysis", function () {
             assert.isNotNull(actualResult.codeExecutionResult, "Execution result is not null");
 
             assert.isTrue(actualResult.codeAnalysisResult.isSuccessful, "Analysis result successful");
-            assert.isTrue(actualResult.codeExecutionResult.wasSuccessful, "Execution result successful");
 
             assert(actualResult.score === expectedScore,
                 `Actual code score equals to expected, expected: ${expectedScore} actual: ${actualResult.score}`);
@@ -190,7 +189,6 @@ describe("Code analysis", function () {
             assert.isNotNull(actualResult.codeExecutionResult, "Execution result is not null");
 
             assert.isTrue(actualResult.codeAnalysisResult.isSuccessful, "Analysis result successful");
-            assert.isTrue(actualResult.codeExecutionResult.wasSuccessful, "Execution result successful");
 
             assert(actualResult.score === expectedScore,
                 `Actual code score equals to expected, expected: ${expectedScore} actual: ${actualResult.score}`);
