@@ -170,6 +170,7 @@ describe("Code analysis", function () {
     });
 
     describe("Php sum with score 100 (input file/output file)", function () {
+	this.slow(minutesToMs(1))
         it("should have analysis result, execution result and mark", async function () {
             //language=Php
             let codeToRun = `
