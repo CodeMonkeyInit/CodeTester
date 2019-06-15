@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -43,7 +44,8 @@ namespace CodeAnalysis.CodeAnalyzers
                 Arguments = new[] {"-c", $"yarn >/dev/null && npx eslint {codeName} -f json"},
                 Limits = new Limits
                 {
-                    MemoryLimitInBytes = ByteSize.FromMegaBytes(100).Bytes.ToLong()
+                    MemoryLimitInBytes = ByteSize.FromMegaBytes(100).Bytes.ToLong(),
+                    TimeLimitInMs = TimeSpan.FromMinutes(5).TotalMilliseconds.ToLong()
                 },
                 WorkingDirectory = executionCommand.WorkingDirectory,
                 MountDirectory = executionCommand.MountDirectory

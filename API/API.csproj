@@ -19,6 +19,10 @@
     <ItemGroup>
         <None Update="eslint\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Update="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
     
     <ItemGroup>
         <Content Update="appsettings.json">
@@ -33,10 +37,25 @@
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-
-        <Content Update="wwwroot\codeQualityTester.html">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <Content Update="wwwroot\api.js">
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Update="wwwroot\codeQualityTester.html">
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\form.js">
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\tests.js">
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+
+        
+        
     </ItemGroup>
 
 </Project>

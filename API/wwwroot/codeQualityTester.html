@@ -4,37 +4,31 @@
     <meta charset="UTF-8">
     <title>CodeQualityTester</title>
 
-    <script>
-        let onSend = async () => {
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
 
-            let language = document.querySelector("#languageInput").value;
-            let text = document.querySelector("#codeInput").value;
 
-            let response = await fetch("https://localhost:5003/api/CodeQuality", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    "ExecutionData": [
-                        {"InputData": "20 10\n", "OutputData": "30"},
-                        {"InputData": "1 1\n", "OutputData": "2"},
-                        {"InputData": "2 2 2\n", "OutputData": "6"},
-                        {"InputData": "4 4", "OutputData": "8"}
-                    ],
+    
 
-                    language,
-                    text
-                })
-            });
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
 
-            let result = JSON.stringify(await response.json(), null, 2);
-
-            document.querySelector("#resultJson").innerText = result;
-            
-        };
-
+    <script class="mocha-init">
+        mocha.setup('bdd');
+        mocha.checkLeaks();
+        mocha.asyncOnly();
     </script>
+    
+    <script src="api.js"></script>
+    <script src="form.js"></script>
+    <script src="tests.js"></script>
+    
+
 </head>
 <body>
+
+<div id="mocha"></div>
+
+<button class="start-tests" onclick="mocha.run()">Start testing</button>
 
 <pre class="prettyprint">
     Js = 1,
