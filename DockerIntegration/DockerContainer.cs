@@ -61,7 +61,7 @@ namespace DockerIntegration
 
 
             if (await TryKillContainerAfterTimeout(command))
-                return ContainerExecutionResult.KilledByMemoryLimit;
+                return ContainerExecutionResult.KilledByTimeout;
 
             var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
 
