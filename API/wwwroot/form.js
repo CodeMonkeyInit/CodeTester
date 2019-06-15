@@ -6,6 +6,6 @@ let onSend = async () => {
     let text = document.querySelector("#codeInput").value;
 
    
-    document.querySelector("#resultJson").innerText = JSON.stringify(Api.fetchRequestForSumTask(language, text), null, 2);
+    document.querySelector("#resultJson").innerText = JSON.stringify(await Api.fetchRequestForSumTask(language, text), null, 2);
 
 };

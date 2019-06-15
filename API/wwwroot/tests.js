@@ -138,6 +138,71 @@ describe("Code analysis", function () {
         })
     });
 
+    describe("C++ infinite loop", function () {
+        it("all test runs should be killed by time limit", async function () {
+            this.slow(minutesToMs(60));
+            //language=C++
+            let codeToRun = `
+                int main() 
+                { 
+                    while (true) {
+                      //infinite loop
+                    }
+                } `;
+
+            let expectedScore = 0;
+
+            let actualResult = await Api.fetchRequestForSumTask(languages.CPlusPlus, codeToRun);
+
+            assert.isNotNull(actualResult.codeAnalysisResult, "Analysis result is not null");
+            assert.isNotNull(actualResult.codeExecutionResult, "Execution result is not null");
+
+            assert.isTrue(actualResult.codeAnalysisResult.isSuccessful, "Analysis result successful");
+            assert.isTrue(actualResult.codeExecutionResult.wasSuccessful, "Execution result successful");
+
+            assert(actualResult.score === expectedScore,
+                `Actual code score equals to expected, expected: ${expectedScore} actual: ${actualResult.score}`);
+            
+            for (let testRunResult of actualResult.codeExecutionResult.results) {
+                assert(testRunResult.executionResult === Api.executionResults.KilledByTimeout, 
+                    `All test runs should be killed by timeout current execution result: ${testRunResult.executionResult}`);
+            }
+
+        })
+    });
+
+    describe("C++ memory limit", function () {
+        it("all test runs should be killed by memory limit", async function () {
+            this.slow(minutesToMs(30));
+            //language=C++
+            let codeToRun = `
+                int main() 
+                { 
+                    while (true) 
+                      int *a = new int;  // infinite loop memory allocation   
+                }`;
+
+            let expectedScore = 0;
+
+            let actualResult = await Api.fetchRequestForSumTask(languages.CPlusPlus, codeToRun);
+
+            assert.isNotNull(actualResult.codeAnalysisResult, "Analysis result is not null");
+            assert.isNotNull(actualResult.codeExecutionResult, "Execution result is not null");
+
+            assert.isTrue(actualResult.codeAnalysisResult.isSuccessful, "Analysis result successful");
+            assert.isTrue(actualResult.codeExecutionResult.wasSuccessful, "Execution result successful");
+
+            assert(actualResult.score === expectedScore,
+                `Actual code score equals to expected, expected: ${expectedScore} actual: ${actualResult.score}`);
+
+            for (let testRunResult of actualResult.codeExecutionResult.results) {
+                assert(testRunResult.executionResult === Api.executionResults.KilledByMemoryLimit,
+                    `All test runs should be killed by memory limit current execution result: ${testRunResult.executionResult}`);
+            }
+
+        })
+    });
+
     describe("Php sum with score 100 (stdin/stdout)", function () {
         it("should have analysis result, execution result and mark", async function () {
             this.slow(secondsToMs(60));

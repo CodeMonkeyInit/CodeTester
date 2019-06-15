@@ -31,6 +31,14 @@
 <button class="start-tests" onclick="mocha.run()">Start testing</button>
 
 <pre class="prettyprint">
+     public enum ExecutionResult
+    {
+        Success = 0,
+        KilledByTimeout = 1,
+        KilledByMemoryLimit = 2
+    }
+    
+    
     Js = 1,
     Php = 2,
     Pascal = 3,
@@ -43,7 +51,7 @@
 </label>
 <label for="codeInput">
     Code:
-<textarea name="" id="codeInput" cols="100" rows="50"></textarea>
+<textarea name="" id="codeInput" cols="50" rows="25"></textarea>
 </label>
 <button id="sendButton" onclick="onSend()">Send</button>
 
