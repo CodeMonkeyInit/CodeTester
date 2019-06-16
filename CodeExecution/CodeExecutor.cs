@@ -76,7 +76,7 @@ namespace CodeExecution
             string binariesFolder, ExecutableCode testingCode)
         {
             var testRunEnvironment = Path.Combine(environmentPath, Guid.NewGuid().ToString());
-
+            
             binariesFolder.CopyFolderTo(testRunEnvironment);
 
             string inputFilePath = Path.Combine(testRunEnvironment, _configuration.InputFileName);

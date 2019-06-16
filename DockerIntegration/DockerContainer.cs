@@ -61,7 +61,7 @@ namespace DockerIntegration
 
 
             if (await TryKillContainerAfterTimeout(command))
-                return ContainerExecutionResult.KilledByMemoryLimit;
+                return ContainerExecutionResult.KilledByTimeout;
 
             var containerInspection = await _client.Containers.InspectContainerAsync(_createContainerResponse.ID);
 
@@ -113,12 +113,6 @@ namespace DockerIntegration
             await _client.Containers.KillContainerAsync(_createContainerResponse.ID, new ContainerKillParameters());
 
             return true;
-        }
-
-        public async Task<IList<ContainerListResponse>> GetContainersAsync()
-        {
-            var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters());
-            return containers;
         }
 
         public async Task<string> GetContainerLogsAsync(ContainerLogsParameters logsParameters)

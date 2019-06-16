@@ -2,6 +2,7 @@
 using AutoMapper;
 using CodeAnalysis.Extensions;
 using CodeExecution.Extension;
+using CodeQuality.Extensions;
 using DockerIntegration.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,7 @@ namespace API
                 .AddDocker(new Uri(Configuration["ContainerConfiguration:DockerEngineUri"]), Configuration)
                 .AddCodeExecution(Configuration)
                 .AddCodeAnalysis(Configuration)
+                .AddCodeQuality(Configuration)
                 .AddAutoMapper();
 
             services
@@ -42,6 +44,13 @@ namespace API
             else
                 app.UseHsts();
 
+
+            
+            app.UseStaticFiles();
+            
+            app.UseDefaultFiles();
+
+            
             app.UseHttpsRedirection();
             app.UseMvc();
         }

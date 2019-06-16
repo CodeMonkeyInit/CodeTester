@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodeQualityTester</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+
+
+    
+
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+
+    <script class="mocha-init">
+        mocha.setup('bdd');
+        mocha.checkLeaks();
+        mocha.asyncOnly();
+    </script>
+    
+    <script src="api.js"></script>
+    <script src="form.js"></script>
+    <script src="tests.js"></script>
+    
+
+</head>
+<body>
+
+<div id="mocha"></div>
+
+<button class="start-tests" onclick="mocha.run()">Start testing</button>
+
+<pre class="prettyprint">
+     public enum ExecutionResult
+    {
+        Success = 0,
+        KilledByTimeout = 1,
+        KilledByMemoryLimit = 2
+    }
+    
+    
+    Js = 1,
+    Php = 2,
+    Pascal = 3,
+    CPlusPlus = 4
+</pre>
+
+<label for="languageInput">
+    Lanugage:
+<input type="text" id="languageInput" name="language">
+</label>
+<label for="codeInput">
+    Code:
+<textarea name="" id="codeInput" cols="50" rows="25"></textarea>
+</label>
+<button id="sendButton" onclick="onSend()">Send</button>
+
+<pre class="prettyprint" id="resultJson"></pre>
+
+
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</body>
+</html>
