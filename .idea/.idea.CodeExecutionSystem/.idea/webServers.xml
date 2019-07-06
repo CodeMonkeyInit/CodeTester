@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ef5a2bb3-b7d5-4a22-bc3b-96ba7236ee99" name="sevsu-test" url="http://10.32.40.15">
+        <fileTransfer host="10.32.40.15" port="22" rootFolder="/var/www/CodeTester" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
