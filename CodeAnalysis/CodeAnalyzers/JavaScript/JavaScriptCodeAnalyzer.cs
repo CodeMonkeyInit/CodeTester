@@ -45,7 +45,7 @@ namespace CodeAnalysis.CodeAnalyzers.JavaScript
                 Limits = new Limits
                 {
                     MemoryLimitInBytes = ByteSize.FromMegaBytes(100).Bytes.ToLong(),
-                    TimeLimitInMs = TimeSpan.FromMinutes(5).TotalMilliseconds.ToLong()
+                    TimeLimitInMs = TimeSpan.FromMinutes(10).TotalMilliseconds.ToLong()
                 },
                 WorkingDirectory = executionCommand.WorkingDirectory,
                 MountDirectory = executionCommand.MountDirectory
