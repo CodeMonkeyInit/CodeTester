@@ -1,4 +1,5 @@
 using CodeAnalysis.CodeAnalyzers;
+using CodeAnalysis.CodeAnalyzers.JavaScript;
 using CodeAnalysis.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

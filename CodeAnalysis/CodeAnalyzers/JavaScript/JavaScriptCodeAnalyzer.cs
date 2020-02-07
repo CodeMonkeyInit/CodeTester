@@ -13,7 +13,7 @@ using DockerIntegration;
 using Helpers;
 using Newtonsoft.Json;
 
-namespace CodeAnalysis.CodeAnalyzers
+namespace CodeAnalysis.CodeAnalyzers.JavaScript
 {
     public class JavaScriptCodeAnalyzer : CodeAnalyzer
     {

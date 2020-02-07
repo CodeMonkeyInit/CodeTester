@@ -1,5 +1,6 @@
 using System;
 using CodeAnalysis.CodeAnalyzers.Base;
+using CodeAnalysis.CodeAnalyzers.JavaScript;
 using CodeExecutionSystem.Contracts.Data;
 using Microsoft.Extensions.DependencyInjection;
 
